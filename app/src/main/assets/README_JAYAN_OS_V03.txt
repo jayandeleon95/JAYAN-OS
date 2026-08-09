@@ -1,0 +1,11 @@
+JAYAN OS WEB V0.3
+- Lock Screen
+- Home
+- Searchable App Drawer
+- Quick Settings / Notifications panel
+- Swipe down from top to open Quick Settings
+- Swipe left to open App Drawer, swipe right to close
+- Functional Settings
+- Configurable wallpaper: Hero / mystical eye / clean black
+- Quick Notes
+- TLD V5.5.4 embedded unchanged as internal module

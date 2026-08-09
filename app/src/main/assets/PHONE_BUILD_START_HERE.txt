@@ -1,0 +1,10 @@
+JAYAN OS 1.8 — PHONE/CLOUD BUILD
+
+Open:
+android-launcher-wrapper/BUILD_FROM_ANDROID_PHONE.md
+
+This version adds a GitHub Actions workflow that compiles the real Android APK
+in the cloud. You can operate the entire workflow from an Android phone.
+
+The generated APK is a debug/testing APK. The signing key for a future production
+release should remain private and should not be included in this ZIP.

@@ -1,0 +1,2316 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<title>Jayan OS</title>
+<style>
+:root{--home-wallpaper:url('hero-v54.jpg');--lock-wallpaper:url('a_dark_dramatic_app_dashboard_ui_screenshot_with.png');
+  --gold:#d6aa45;--gold2:#fff0ad;--ink:#050505;--panel:rgba(10,10,10,.78);
+  --radius:20px;--blur:18px;--icon:58px;--wallpaper:url('hero-v54.jpg');
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#030303;color:#fff;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{min-height:100dvh;overflow:hidden}
+.bg{position:fixed;inset:0;background:linear-gradient(rgba(0,0,0,.36),rgba(0,0,0,.76)),var(--wallpaper) center/cover no-repeat;filter:saturate(.9)}
+.screen{position:relative;z-index:1;min-height:100dvh;padding:env(safe-area-inset-top) 18px env(safe-area-inset-bottom);display:flex;flex-direction:column}
+.status{display:flex;justify-content:space-between;align-items:center;padding:14px 4px;color:#f5e7bc;font-size:13px}
+.brand{text-align:center;margin:6px 0 18px}.brand .eye{width:84px;height:84px;border-radius:50%;object-fit:cover;border:1px solid #7f632d;box-shadow:0 0 30px rgba(214,170,69,.18)}
+.brand h1{font-family:Georgia,serif;letter-spacing:.16em;color:var(--gold2);font-size:22px;margin:8px 0 2px}.brand p{margin:0;color:#aa9565;font-size:11px;letter-spacing:.22em}
+.jarvis{border:1px solid #665126;background:linear-gradient(180deg,rgba(20,17,10,.82),rgba(4,4,4,.84));border-radius:var(--radius);padding:14px 15px;margin-bottom:18px;box-shadow:0 12px 35px #0008;backdrop-filter:blur(var(--blur))}
+.jarvis small{color:#a58a52;letter-spacing:.15em}.jarvis .row{display:flex;gap:10px;align-items:center;margin-top:8px}.jarvis input{flex:1;background:#090909;border:1px solid #46391f;color:white;border-radius:13px;padding:12px;outline:none}.jarvis button{border:1px solid #725a28;background:#17130b;color:#ffeaa6;border-radius:13px;width:44px;height:44px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px 10px;align-content:start}
+.app{text-align:center;color:white;font-size:12px;user-select:none}.ico{width:var(--icon);height:var(--icon);margin:auto auto 7px;border-radius:17px;display:grid;place-items:center;font-size:25px;background:linear-gradient(145deg,#1a160e,#050505);border:1px solid #745a27;box-shadow:inset 0 0 20px #d6aa4510,0 8px 20px #0009;transition:.15s}.app:active .ico{transform:scale(.94)}
+.spacer{flex:1}.dock{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 12px;padding:10px;border-radius:25px;background:#080808c9;border:1px solid #3b301b;backdrop-filter:blur(var(--blur))}
+.dock .ico{width:52px;height:52px;margin:0 auto}.dock .app{font-size:10px}
+.overlay{position:fixed;z-index:10;inset:0;background:#000;display:none}.overlay.show{display:block}.overlay iframe{width:100%;height:100%;border:0;background:#000}
+.topbar{position:absolute;z-index:12;top:calc(env(safe-area-inset-top) + 8px);right:10px}.close{background:#090909dd;border:1px solid #8a6a2b;color:#ffeaa6;border-radius:999px;padding:8px 12px;font-weight:700}
+.sheet{position:fixed;z-index:30;inset:auto 12px 18px;background:#090909f5;border:1px solid #6c5528;border-radius:22px;padding:18px;display:none;box-shadow:0 20px 80px #000;max-height:78dvh;overflow:auto;backdrop-filter:blur(var(--blur))}
+.sheet.show{display:block}.sheet h3{color:#ffe7a0;margin:0 0 8px}.sheet p,.sheet label{color:#c9bea3;font-size:13px;line-height:1.45}.sheet button,.sheet select,.sheet input[type="text"]{background:#17130b;border:1px solid #6d572a;color:#ffe8a4;padding:10px 13px;border-radius:12px}
+.sheet input[type="range"]{width:100%}.settings-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #241e13}.settings-row:last-child{border-bottom:0}
+.drawer{position:fixed;z-index:22;inset:0;background:linear-gradient(#050505f2,#000000f4);display:none;padding:calc(env(safe-area-inset-top) + 16px) 18px calc(env(safe-area-inset-bottom) + 18px);overflow:auto;backdrop-filter:blur(20px)}
+.drawer.show{display:block}.drawer-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}.drawer-head input{flex:1;background:#0b0b0b;border:1px solid #5e4a23;border-radius:14px;padding:13px;color:#fff;outline:none}.drawer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px 10px}
+.lock{position:fixed;z-index:50;inset:0;background:linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.68)),var(--wallpaper) center/cover no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 42px) 22px calc(env(safe-area-inset-bottom) + 34px)}
+.lock.hidden{display:none}.lock-time{font-size:68px;font-weight:250;letter-spacing:-.05em;text-shadow:0 4px 30px #000}.lock-date{margin-top:2px;color:#f4df9f;text-align:center}.lock-brand{text-align:center}.lock-brand img{width:92px;height:92px;border-radius:50%;border:1px solid #85672d;box-shadow:0 0 40px #d6aa4533}.lock-brand h2{font-family:Georgia,serif;letter-spacing:.18em;color:#fff0ad;margin:10px 0 0}.unlock{width:min(420px,100%);background:#070707bb;border:1px solid #735a2b;color:#ffedab;border-radius:999px;padding:14px;text-align:center;font-weight:700;backdrop-filter:blur(12px)}
+.notearea{width:100%;min-height:190px;background:#080808;border:1px solid #4c3c20;color:#fff;border-radius:14px;padding:12px;resize:vertical}
+.toast{position:fixed;z-index:60;left:50%;bottom:100px;transform:translateX(-50%);background:#090909ee;border:1px solid #755b29;color:#ffe9a3;padding:10px 14px;border-radius:999px;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}
+@media(min-width:700px){.screen{max-width:520px;margin:auto}.grid,.drawer-grid{grid-template-columns:repeat(5,1fr)}}
+
+.quickpanel{position:fixed;z-index:40;left:10px;right:10px;top:calc(env(safe-area-inset-top) + 8px);transform:translateY(-120%);transition:.28s ease;background:#080808f2;border:1px solid #6b552a;border-radius:24px;padding:16px;backdrop-filter:blur(22px);box-shadow:0 20px 70px #000}
+.quickpanel.show{transform:translateY(0)}
+.qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.qhead b{color:#ffe8a3}.qtime{font-size:28px;font-weight:300}
+.qgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.qtile{background:#111;border:1px solid #41351d;border-radius:16px;padding:12px 6px;text-align:center;color:#cfc4a5;font-size:11px}.qtile.on{background:#2a210e;border-color:#a27b2f;color:#ffe9a5}.qtile span{display:block;font-size:22px;margin-bottom:5px}
+.notif{margin-top:14px;border-top:1px solid #2b2416;padding-top:12px}.notif-card{background:#0d0d0d;border:1px solid #302718;border-radius:14px;padding:11px 12px;margin-top:8px}.notif-card small{color:#9c885b}.notif-card div{margin-top:3px}
+.wallpaper-preview{height:120px;border-radius:16px;background:linear-gradient(#0003,#0007),var(--wallpaper) center/cover no-repeat;border:1px solid #4c3d20;margin:8px 0 12px}
+.gesture-hint{position:fixed;z-index:5;top:0;left:25%;right:25%;height:8px;border-radius:0 0 8px 8px;background:#d6aa4526}
+
+
+.launcher-pages{position:relative;overflow:hidden;flex:1;display:flex;flex-direction:column}
+.page-track{display:flex;flex:1;width:300%;transition:transform .28s ease}
+.home-page{width:33.3333%;padding:0 2px;flex-shrink:0;overflow:auto}
+.page-dots{display:flex;justify-content:center;gap:7px;margin:10px 0 2px}
+.page-dot{width:7px;height:7px;border-radius:50%;background:#5d4a28}.page-dot.active{background:#ffe9a5;box-shadow:0 0 10px #d6aa45}
+.widget{background:#090909c9;border:1px solid #5f4b25;border-radius:20px;padding:14px;margin-bottom:14px;backdrop-filter:blur(var(--blur));box-shadow:0 10px 28px #0007}
+.widget h4{margin:0 0 8px;color:#ffe8a3}.widget .big{font-size:28px;color:#fff0ad}.widget small{color:#aa9565}
+.folder{position:fixed;z-index:35;left:18px;right:18px;bottom:24px;background:#080808f6;border:1px solid #6d562a;border-radius:24px;padding:16px;display:none;box-shadow:0 20px 80px #000;backdrop-filter:blur(22px)}
+.folder.show{display:block}.folder-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px;margin-top:12px}
+.editbar{position:fixed;z-index:34;left:12px;right:12px;bottom:18px;background:#080808f2;border:1px solid #6b552a;border-radius:18px;padding:10px;display:none;gap:8px;align-items:center;justify-content:center;backdrop-filter:blur(18px)}
+.editbar.show{display:flex}.editbar button{background:#15110a;border:1px solid #6d5629;color:#ffe7a0;border-radius:12px;padding:9px 12px}
+.dragging{opacity:.45;transform:scale(.94)}
+.editmode .app .ico{animation:jiggle .18s infinite alternate}
+@keyframes jiggle{from{transform:rotate(-1.2deg)}to{transform:rotate(1.2deg)}}
+.widget-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mini-widget{background:#0b0b0bd8;border:1px solid #46391f;border-radius:16px;padding:12px;min-height:86px}
+.mini-widget b{color:#ffe8a4}.mini-widget div{font-size:21px;margin-top:8px}
+
+
+.appmenu{position:fixed;z-index:45;min-width:210px;background:#080808f7;border:1px solid #6b552a;border-radius:18px;padding:8px;display:none;box-shadow:0 20px 70px #000;backdrop-filter:blur(20px)}
+.appmenu.show{display:block}.appmenu button{display:block;width:100%;text-align:left;background:transparent;border:0;color:#f3e6bd;padding:11px 12px;border-radius:11px}.appmenu button:active{background:#1a150d}
+.hidden-app{display:none!important}
+.widget.editable{position:relative}.widget-tools{position:absolute;top:8px;right:8px;display:none;gap:6px}.editmode .widget-tools{display:flex}.widget-tools button{background:#0d0d0de8;border:1px solid #5d4923;color:#ffe9a5;border-radius:10px;padding:5px 8px}
+.custom-folder-badge{font-size:10px;color:#aa9565;margin-top:2px}
+.manage-list{display:flex;flex-direction:column;gap:8px}.manage-row{display:flex;align-items:center;gap:10px;background:#0b0b0b;border:1px solid #302719;border-radius:13px;padding:10px}.manage-row .grow{flex:1}.manage-row button{padding:7px 9px}
+
+
+:root{--accent:#d6aa45;--accent-soft:#fff0ad;--glass:rgba(9,9,9,.78);--scale:1}
+body.compact{--icon:50px}
+body.large{--icon:68px}
+body.reduce-motion *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+body.high-contrast{filter:contrast(1.08)}
+body.safe-mode .jarvis,body.safe-mode .quickpanel .qgrid,body.safe-mode .widget-tools{display:none!important}
+.command-palette{position:fixed;z-index:70;left:12px;right:12px;top:calc(env(safe-area-inset-top) + 68px);background:#070707f8;border:1px solid #70582a;border-radius:22px;padding:14px;display:none;box-shadow:0 24px 90px #000;backdrop-filter:blur(24px)}
+.command-palette.show{display:block}
+.command-palette input{width:100%;background:#0c0c0c;border:1px solid #40341d;border-radius:14px;padding:14px;color:white;outline:none;font-size:16px}
+.command-results{margin-top:10px;max-height:52dvh;overflow:auto}
+.command-item{padding:12px;border-radius:13px;color:#eee1b9;display:flex;align-items:center;gap:10px}
+.command-item:active,.command-item.active{background:#1a150c}
+.command-item small{margin-left:auto;color:#90794c}
+.native-badge{font-size:9px;padding:2px 6px;border-radius:999px;border:1px solid #5b4824;color:#c5a96e;margin-left:4px}
+.widget-weather .bigline{font-size:34px;color:#ffe9a5}.widget-weather .sub{color:#b8a474}
+.widget-system{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.sysstat{background:#0a0a0a;border:1px solid #302718;border-radius:14px;padding:10px;text-align:center}.sysstat b{display:block;color:#ffe7a0;font-size:17px}.sysstat small{color:#8f7c55}
+.backup-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.backup-actions button{width:100%}
+#nativeAppsGrid{margin-top:14px}
+.native-app-icon{font-size:18px}
+.searchbar-home{display:flex;gap:8px;margin-bottom:14px}.searchbar-home button,.searchbar-home input{background:#090909cc;border:1px solid #4e3f21;color:white;border-radius:15px;padding:12px}.searchbar-home input{flex:1}
+.focus-overlay{position:fixed;z-index:65;inset:0;background:#000000f3;display:none;align-items:center;justify-content:center;padding:24px}.focus-overlay.show{display:flex}.focus-card{max-width:420px;width:100%;border:1px solid #6d5528;border-radius:24px;background:#090909;padding:22px;text-align:center}.focus-card h2{color:#ffe9a5}.focus-timer{font-size:56px;font-weight:250;margin:18px 0}.focus-card button{background:#17120a;border:1px solid #70592c;color:#ffe9a5;border-radius:13px;padding:11px 15px}
+
+
+:root{
+  --accent:#d6aa45;
+  --accent2:#fff0ad;
+  --panel-alpha:.78;
+  --icon-radius:17px;
+  --dock-alpha:.79;
+  --wall-dim:.44;
+  --wall-blur:0px;
+  --wall-scale:1;
+  --card-border:#5f4b25;
+  --card-shadow:0 12px 34px #0008;
+}
+.bg{
+  filter:saturate(.95) brightness(calc(1 - var(--wall-dim) * .35));
+  transform:scale(var(--wall-scale));
+}
+body.wall-blur .bg{filter:blur(var(--wall-blur)) saturate(.9) brightness(.72)}
+body.theme-obsidian{--accent:#d6aa45;--accent2:#fff0ad}
+body.theme-royal{--accent:#9bb6ff;--accent2:#dbe6ff}
+body.theme-emerald{--accent:#73d9ae;--accent2:#d9ffef}
+body.theme-crimson{--accent:#e68b8b;--accent2:#ffdada}
+body.theme-mono{--accent:#d8d8d8;--accent2:#ffffff}
+body.theme-royal .ico,body.theme-royal .widget,body.theme-royal .jarvis,body.theme-royal .dock{border-color:#4667a8}
+body.theme-emerald .ico,body.theme-emerald .widget,body.theme-emerald .jarvis,body.theme-emerald .dock{border-color:#326f58}
+body.theme-crimson .ico,body.theme-crimson .widget,body.theme-crimson .jarvis,body.theme-crimson .dock{border-color:#7b3d3d}
+body.theme-mono .ico,body.theme-mono .widget,body.theme-mono .jarvis,body.theme-mono .dock{border-color:#555}
+.brand h1,.widget h4,.widget b,.jarvis small,.qhead b,.sheet h3{color:var(--accent2)!important}
+.ico{border-radius:var(--icon-radius);border-color:var(--accent);box-shadow:inset 0 0 20px color-mix(in srgb,var(--accent) 10%,transparent),0 8px 20px #0009}
+.widget,.jarvis{background:rgba(9,9,9,var(--panel-alpha));border-color:var(--card-border);box-shadow:var(--card-shadow)}
+.dock{background:rgba(8,8,8,var(--dock-alpha))}
+body.icon-circle{--icon-radius:999px}
+body.icon-square{--icon-radius:10px}
+body.icon-soft{--icon-radius:22px}
+body.dock-hidden .dock{display:none}
+body.labels-hidden .app{font-size:0}.app .ico{font-size:25px}
+body.labels-hidden .custom-folder-badge{display:none}
+body.glass-strong .widget,body.glass-strong .jarvis,body.glass-strong .dock{backdrop-filter:blur(28px) saturate(1.2)}
+body.shadow-off .widget,body.shadow-off .jarvis,body.shadow-off .ico{box-shadow:none}
+body.status-hidden .status{visibility:hidden}
+.wallpaper-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.wall-option{height:72px;border-radius:14px;border:1px solid #4c3c20;background:#0a0a0a center/cover no-repeat;position:relative;overflow:hidden}
+.wall-option span{position:absolute;left:5px;right:5px;bottom:5px;font-size:9px;background:#000a;border-radius:8px;padding:3px;text-align:center}
+.color-dot{width:26px;height:26px;border-radius:50%;border:2px solid #fff4;display:inline-block;margin:3px}
+.custom-slider{width:100%}
+.home-clock-large{text-align:center;margin-bottom:14px;text-shadow:0 3px 22px #000}.home-clock-large .t{font-size:46px;font-weight:250;letter-spacing:-.04em}.home-clock-large .d{color:var(--accent2);font-size:12px;letter-spacing:.08em}
+body.clock-hidden .home-clock-large{display:none}
+body.minimal-home .brand,body.minimal-home .jarvis{display:none}
+
+
+/* ===== JAYAN OS V0.8 FLAGSHIP UI ===== */
+:root{
+  --ease-samsung:cubic-bezier(.2,.8,.2,1);
+  --panel-radius:28px;
+  --cyber-glow:0 0 22px color-mix(in srgb,var(--accent) 30%,transparent);
+}
+body{overscroll-behavior:none}
+.quickpanel{
+  top:calc(env(safe-area-inset-top) + 6px);
+  left:8px;right:8px;
+  border-radius:30px;
+  background:linear-gradient(180deg,rgba(14,14,16,.96),rgba(5,5,7,.94));
+  border:1px solid color-mix(in srgb,var(--accent) 35%,#2b2b2b);
+  box-shadow:0 30px 100px #000c,inset 0 1px 0 #ffffff08;
+  transform:translateY(calc(-100% - 30px)) scale(.98);
+  opacity:.3;
+  transition:transform .42s var(--ease-samsung),opacity .32s ease;
+  will-change:transform,opacity;
+}
+.quickpanel.show{transform:translateY(0) scale(1);opacity:1}
+.quickpanel.dragging{transition:none}
+.quickpanel::before{
+  content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);
+  width:46px;height:4px;border-radius:999px;background:#ffffff22
+}
+.qhead{padding-top:8px}
+.qtime{
+  font-family:"Orbitron","Segoe UI",system-ui,sans-serif;
+  font-variant-numeric:tabular-nums;
+  font-size:34px;letter-spacing:.06em;
+  color:var(--accent2);
+  text-shadow:var(--cyber-glow)
+}
+.qgrid{grid-template-columns:repeat(4,1fr);gap:12px}
+.qtile{
+  min-height:78px;border-radius:22px;
+  background:linear-gradient(160deg,#15161a,#09090b);
+  border:1px solid #ffffff0d;
+  box-shadow:inset 0 1px 0 #ffffff08,0 8px 24px #0007;
+  transition:transform .18s var(--ease-samsung),background .2s,border-color .2s;
+}
+.qtile:active{transform:scale(.94)}
+.qtile.on{
+  background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 26%,#151515),#0d0d0f);
+  border-color:color-mix(in srgb,var(--accent) 55%,transparent);
+  color:var(--accent2);
+  box-shadow:inset 0 1px 0 #ffffff12,0 0 22px color-mix(in srgb,var(--accent) 18%,transparent)
+}
+.qtile span{font-size:24px}
+.notif-card{
+  border-radius:20px;background:linear-gradient(180deg,#111217,#0b0b0e);
+  border:1px solid #ffffff0c;padding:13px 14px;
+  box-shadow:inset 0 1px 0 #ffffff08,0 10px 26px #0007
+}
+.notif-card .notif-icon{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:#17130b;border:1px solid #6d5629;margin-right:10px}
+.notif-row{display:flex;align-items:center}
+
+.home-clock-large{
+  padding:10px 0 4px;
+  font-family:"Orbitron","Rajdhani","Segoe UI",sans-serif;
+  letter-spacing:.08em
+}
+.home-clock-large .t{
+  font-size:54px;font-weight:600;
+  color:var(--accent2);
+  text-shadow:0 0 12px color-mix(in srgb,var(--accent) 35%,transparent),0 0 30px color-mix(in srgb,var(--accent) 15%,transparent);
+  position:relative;
+}
+.home-clock-large .t::after{
+  content:"";display:block;width:84px;height:2px;margin:8px auto 0;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  box-shadow:0 0 16px var(--accent)
+}
+.home-clock-large .d{
+  text-transform:uppercase;font-size:10px;letter-spacing:.24em;color:#c4b787
+}
+
+.lock{
+  justify-content:space-between;
+  background:
+   radial-gradient(circle at 50% 18%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 34%),
+   linear-gradient(rgba(0,0,0,.10),rgba(0,0,0,.66)),
+   var(--lock-wallpaper) center/cover no-repeat!important;
+  overflow:hidden;
+}
+.lock::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+   linear-gradient(90deg,transparent 49.7%,color-mix(in srgb,var(--accent) 8%,transparent) 50%,transparent 50.3%),
+   linear-gradient(0deg,transparent 49.7%,color-mix(in srgb,var(--accent) 6%,transparent) 50%,transparent 50.3%);
+  background-size:46px 46px;
+  mask-image:linear-gradient(to bottom,#0006,transparent 72%);
+}
+.lock::after{
+  content:"";position:absolute;inset:-20%;
+  background:conic-gradient(from 0deg at 50% 35%,transparent 0 20%,color-mix(in srgb,var(--accent) 8%,transparent) 23%,transparent 27% 100%);
+  animation:lockSweep 14s linear infinite;pointer-events:none
+}
+@keyframes lockSweep{to{transform:rotate(360deg)}}
+.lock>*{position:relative;z-index:2}
+.lock-time{
+  font-family:"Orbitron","Rajdhani","Segoe UI",sans-serif;
+  font-size:76px;font-weight:650;letter-spacing:.08em;
+  color:#f9efc3;text-shadow:0 0 14px color-mix(in srgb,var(--accent) 35%,transparent),0 0 40px #000;
+  text-align:center
+}
+.lock-date{
+  text-transform:uppercase;letter-spacing:.20em;font-size:11px;color:var(--accent2);
+  margin-top:6px
+}
+.lock-brand{
+  background:radial-gradient(circle,#0008,transparent 68%);
+  padding:24px 34px;border-radius:50%
+}
+.lock-brand img{
+  width:108px;height:108px;border:1px solid color-mix(in srgb,var(--accent) 60%,#444);
+  box-shadow:0 0 30px color-mix(in srgb,var(--accent) 28%,transparent),inset 0 0 22px #000
+}
+.lock-brand h2{
+  font-family:"Orbitron","Segoe UI",sans-serif;
+  font-size:16px;letter-spacing:.28em;color:var(--accent2);
+  text-shadow:var(--cyber-glow)
+}
+.lock-status{
+  display:flex;gap:12px;justify-content:center;margin-top:12px;
+  font-size:10px;color:#d7c99b;letter-spacing:.08em
+}
+.lock-status span{
+  padding:6px 9px;border-radius:999px;background:#08080899;border:1px solid #ffffff12;
+  backdrop-filter:blur(10px)
+}
+.unlock{
+  border-radius:22px;padding:15px 18px;
+  background:linear-gradient(180deg,#0d0e12cc,#060608dd);
+  border:1px solid color-mix(in srgb,var(--accent) 42%,#333);
+  box-shadow:0 16px 42px #000a,inset 0 1px 0 #ffffff0b;
+  letter-spacing:.08em
+}
+.unlock::before{content:"⌃ ";color:var(--accent)}
+.lock-hint{font-size:10px;color:#9b8c66;text-align:center;margin-top:8px;letter-spacing:.12em}
+
+.status{
+  backdrop-filter:blur(8px);
+  background:linear-gradient(180deg,#00000033,transparent);
+  border-radius:0 0 16px 16px
+}
+.screen{transition:filter .3s ease,transform .3s var(--ease-samsung)}
+.quickpanel.show ~ .screen{filter:brightness(.68) blur(1px);transform:scale(.992)}
+.dock{
+  border-radius:28px;
+  box-shadow:0 16px 50px #000a,inset 0 1px 0 #ffffff08
+}
+.widget{
+  border-radius:24px;
+  box-shadow:0 14px 40px #0008,inset 0 1px 0 #ffffff07
+}
+.ico{
+  transition:transform .18s var(--ease-samsung),box-shadow .2s,border-color .2s;
+}
+.app:active .ico{transform:scale(.90)}
+.page-track{transition:transform .38s var(--ease-samsung)}
+.drawer{
+  background:linear-gradient(180deg,#060608f6,#000000f8);
+  transition:opacity .25s ease
+}
+.drawer-head input{border-radius:18px}
+.command-palette{
+  border-radius:28px;
+  box-shadow:0 28px 110px #000e
+}
+.cyber-line{
+  position:fixed;z-index:4;left:8%;right:8%;top:calc(env(safe-area-inset-top) + 58px);height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.28;
+  box-shadow:0 0 12px var(--accent);pointer-events:none
+}
+body.reduce-motion .lock::after{animation:none}
+
+
+/* V0.9 interaction polish */
+.smart-dock{position:fixed;z-index:12;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 10px);display:flex;justify-content:space-around;align-items:center;padding:9px 12px;border-radius:28px;background:#08090bdd;border:1px solid #ffffff10;backdrop-filter:blur(24px);box-shadow:0 16px 55px #000b}
+.smart-dock button{width:52px;height:52px;border-radius:18px;background:#111217;border:1px solid #ffffff0e;color:var(--accent2);font-size:22px;box-shadow:inset 0 1px #ffffff08}
+.smart-dock button:active{transform:scale(.9)}
+body.dock-hidden .smart-dock{display:none}
+.recents{position:fixed;z-index:80;inset:0;background:#020204e8;backdrop-filter:blur(18px);display:none;padding:calc(env(safe-area-inset-top) + 60px) 16px 100px;overflow:auto}
+.recents.show{display:block}.recents h2{color:var(--accent2);letter-spacing:.12em}.recent-card{background:linear-gradient(160deg,#15161a,#08090b);border:1px solid #ffffff10;border-radius:24px;padding:18px;margin:12px 0;min-height:112px;box-shadow:0 18px 50px #0009}.recent-card b{color:#fff1bd}.recent-card small{display:block;color:#8f835f;margin-top:7px}
+.edge-glow{position:fixed;z-index:90;inset:0;pointer-events:none;border:0 solid var(--accent);opacity:0;box-shadow:inset 0 0 45px var(--accent)}
+.edge-glow.flash{animation:edgeFlash .8s ease}
+@keyframes edgeFlash{0%{opacity:0;border-width:0}25%{opacity:.45;border-width:2px}100%{opacity:0;border-width:0}}
+.lock-actions{display:flex;gap:12px;justify-content:center;margin-bottom:8px}.lock-action{width:48px;height:48px;border-radius:50%;background:#08090bbb;border:1px solid #ffffff18;color:var(--accent2);font-size:18px;backdrop-filter:blur(14px)}
+.gesture-pill{position:fixed;z-index:92;bottom:4px;left:50%;transform:translateX(-50%);width:112px;height:5px;border-radius:999px;background:#ffffffb5;box-shadow:0 0 12px #fff3}
+
+
+.native-center{position:fixed;z-index:75;inset:0;background:#030305f2;backdrop-filter:blur(22px);display:none;padding:calc(env(safe-area-inset-top) + 58px) 14px 90px;overflow:auto}
+.native-center.show{display:block}.native-card{background:linear-gradient(160deg,#14151a,#08090b);border:1px solid #ffffff10;border-radius:22px;padding:15px;margin:10px 0}.native-card h3{margin:0 0 8px;color:var(--accent2)}.native-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.native-actions button{background:#121318;border:1px solid #ffffff12;color:#f7e9b7;border-radius:14px;padding:12px}
+.native-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#777;margin-right:7px}.native-dot.on{background:#72e0a8;box-shadow:0 0 12px #72e0a8}
+
+
+/* JAYAN OS 1.1 */
+.notif-center{position:fixed;z-index:84;inset:0;background:#020204ee;backdrop-filter:blur(24px);display:none;padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.notif-center.show{display:block}
+.notif-item{background:linear-gradient(160deg,#15161a,#090a0d);border:1px solid #ffffff10;border-radius:22px;padding:14px;margin:9px 0;display:flex;gap:11px;align-items:flex-start}.notif-item .ni{width:38px;height:38px;border-radius:13px;background:#16120b;border:1px solid #6c5629;display:grid;place-items:center}.notif-item .nb{flex:1}.notif-item b{color:#fff0b8}.notif-item small{color:#8e805c}
+.app-search-native{display:flex;gap:8px;margin:10px 0}.app-search-native input{flex:1;background:#0b0c0f;border:1px solid #ffffff12;border-radius:15px;padding:12px;color:#fff}
+.lock-notifs{width:min(430px,92vw);margin:10px auto}.lock-mini{background:#08090bb8;border:1px solid #ffffff12;border-radius:18px;padding:10px 12px;margin:7px 0;backdrop-filter:blur(14px);font-size:11px;color:#e9ddb7}
+
+
+/* JAYAN OS 1.2 — native launcher polish */
+.app-drawer-native{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px;padding:8px 0 24px}
+.native-app{font-size:11px;text-align:center;color:#e8ddb8;min-width:0}
+.native-app .ico{margin:auto auto 6px;overflow:hidden}
+.native-app .ico img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.badge{position:absolute;right:-4px;top:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#d24b4b;color:white;font-size:10px;display:grid;place-items:center;border:2px solid #08090b}
+.ico-wrap{position:relative;width:max-content;margin:auto}
+.native-search{width:100%;box-sizing:border-box;background:#090a0d;border:1px solid #ffffff12;border-radius:17px;padding:13px;color:white;margin:8px 0 12px}
+.permission-card{border:1px solid #6a5429;background:#0b0b0dcc;border-radius:18px;padding:12px;margin:10px 0}.permission-card button{margin-top:8px}
+
+
+/* JAYAN OS 1.3 — Device Control */
+.control-hub{position:fixed;z-index:86;inset:0;display:none;background:#020204ef;backdrop-filter:blur(25px);padding:calc(env(safe-area-inset-top) + 52px) 14px 90px;overflow:auto}.control-hub.show{display:block}
+.control-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.control-tile{min-height:92px;border-radius:22px;background:linear-gradient(155deg,#17181d,#090a0d);border:1px solid #ffffff10;color:#eee1b8;padding:13px;text-align:left}.control-tile span{display:block;font-size:25px;margin-bottom:8px;color:var(--accent2)}.control-tile:active{transform:scale(.96)}
+.control-wide{grid-column:1/-1}.brightness-wrap{margin-top:10px}.brightness-wrap input{width:100%}
+
+
+/* JAYAN OS 1.4 — Intelligence & UX */
+:root{--dynamic-accent:var(--accent)}
+.profile-chip{position:fixed;z-index:15;right:14px;top:calc(env(safe-area-inset-top) + 42px);padding:6px 10px;border-radius:999px;background:#08090bbb;border:1px solid #ffffff12;color:var(--accent2);font-size:9px;letter-spacing:.12em;backdrop-filter:blur(14px)}
+.profile-center{position:fixed;z-index:87;inset:0;display:none;background:#020204ef;backdrop-filter:blur(24px);padding:calc(env(safe-area-inset-top) + 55px) 14px 90px;overflow:auto}.profile-center.show{display:block}
+.profile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.profile-btn{min-height:100px;border-radius:23px;background:linear-gradient(155deg,#15161a,#08090b);border:1px solid #ffffff10;color:#e9ddb7;font-size:14px}.profile-btn span{display:block;font-size:28px;margin-bottom:8px}
+.aod{position:fixed;z-index:110;inset:0;background:#000;display:none;align-items:center;justify-content:center}.aod.show{display:flex}.aod-core{text-align:center}.aod-time{font-family:"Orbitron","Segoe UI",sans-serif;font-size:64px;letter-spacing:.1em;color:#e7d79d;text-shadow:0 0 18px #d6aa4540}.aod-date{font-size:10px;letter-spacing:.22em;color:#756a4e;text-transform:uppercase}.aod-bat{margin-top:22px;font-size:10px;color:#655c46}
+body.performance-mode *{backdrop-filter:none!important;box-shadow:none!important;text-shadow:none!important}body.performance-mode .lock::after{display:none!important}
+body.profile-night{--panel-alpha:.90;--dock-alpha:.90}.profile-night .bg{filter:brightness(.42) saturate(.7)}
+body.profile-gym{--accent:#efb64c;--accent2:#fff1bd}.profile-work{--accent:#9bb6ff;--accent2:#e6edff}.profile-minimal .widget,.profile-minimal .jarvis{display:none}
+.haptic-ready button:active,.haptic-ready .app:active{transform:scale(.94)}
+
+
+/* JAYAN OS 1.5 — Command & Safety Core */
+.health-center{position:fixed;z-index:89;inset:0;display:none;background:#020204f2;backdrop-filter:blur(25px);padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.health-center.show{display:block}
+.health-card{background:linear-gradient(155deg,#15161a,#08090b);border:1px solid #ffffff10;border-radius:22px;padding:14px;margin:10px 0}.health-card b{color:var(--accent2)}.health-ok{color:#78dda9}.health-warn{color:#e9ba68}
+.voice-orb{position:fixed;z-index:18;right:16px;bottom:calc(env(safe-area-inset-bottom) + 88px);width:52px;height:52px;border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 55%,#333);background:#090a0ddd;color:var(--accent2);box-shadow:0 0 24px color-mix(in srgb,var(--accent) 18%,transparent);font-size:20px}.voice-orb.listening{animation:voicePulse 1s infinite alternate}@keyframes voicePulse{to{box-shadow:0 0 38px color-mix(in srgb,var(--accent) 48%,transparent);transform:scale(1.06)}}
+body.safe-boot .widget,body.safe-boot .jarvis,body.safe-boot .cyber-line{display:none!important}
+
+
+/* JAYAN OS 1.6 — Release Candidate */
+.release-center{position:fixed;z-index:91;inset:0;display:none;background:#020204f2;backdrop-filter:blur(25px);padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.release-center.show{display:block}
+.release-card{background:linear-gradient(155deg,#15161a,#08090b);border:1px solid #ffffff10;border-radius:22px;padding:14px;margin:10px 0}.release-card b{color:var(--accent2)}.release-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.release-grid button{background:#101116;border:1px solid #ffffff12;color:#eee1b8;border-radius:14px;padding:12px}
+.boot-logo{position:fixed;z-index:130;inset:0;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .45s ease}.boot-logo.hide{opacity:0;pointer-events:none}.boot-core{text-align:center}.boot-core img{width:112px;height:112px;border-radius:50%;box-shadow:0 0 45px #d6aa4550}.boot-core h1{font-family:"Orbitron","Segoe UI",sans-serif;letter-spacing:.22em;color:#f3e3ad;font-size:18px}.boot-core small{color:#71674d;letter-spacing:.18em}
+
+
+/* JAYAN OS 1.7 — Daily Driver */
+.launcher-search{position:fixed;z-index:93;inset:0;display:none;background:#020204e8;backdrop-filter:blur(26px);padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.launcher-search.show{display:block}
+.launcher-search input{width:100%;box-sizing:border-box;background:#0b0c10;border:1px solid #ffffff14;border-radius:22px;padding:16px;color:#fff;font-size:16px;outline:none}.search-section{margin-top:18px}.search-section h3{font-size:10px;letter-spacing:.18em;color:#8f815e}.search-hit{display:flex;align-items:center;gap:11px;background:#101116;border:1px solid #ffffff0d;border-radius:18px;padding:12px;margin:7px 0}.search-hit .sicon{width:36px;height:36px;border-radius:12px;background:#18191d;display:grid;place-items:center;color:var(--accent2)}
+.widget-stack{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:8px 12px}.mini-widget{min-height:78px;border-radius:20px;padding:12px;background:#08090bc4;border:1px solid #ffffff0d;backdrop-filter:blur(18px);box-shadow:0 12px 34px #0007}.mini-widget b{color:var(--accent2);font-size:11px}.mini-widget .big{font-size:24px;margin-top:7px}.mini-widget small{color:#887b59}
+.privacy-dot{position:fixed;z-index:120;right:11px;top:calc(env(safe-area-inset-top) + 8px);width:8px;height:8px;border-radius:50%;background:#67d99a;box-shadow:0 0 12px #67d99a;display:none}.privacy-dot.on{display:block}
+
+</style>
+</head>
+<body>
+<div id="edgeGlow" class="edge-glow"></div>
+<div class="cyber-line"></div>
+
+<div class="gesture-hint"></div>
+<section id="quickpanel" class="quickpanel">
+  <div class="qhead">
+    <div><div id="qTime" class="qtime">--:--</div><small id="qDate"></small></div>
+    <button class="close" onclick="toggleQuick(false)">Cerrar</button>
+  </div>
+  <div class="qgrid">
+    <div class="qtile on" data-toggle="wifi" onclick="toggleTile(this)"><span>⌁</span>Wi‑Fi</div>
+    <div class="qtile on" data-toggle="sound" onclick="toggleTile(this)"><span>♫</span>Sonido</div>
+    <div class="qtile" data-toggle="focus" onclick="toggleTile(this)"><span>◐</span>Focus</div>
+    <div class="qtile" data-toggle="dark" onclick="toggleTile(this)"><span>☾</span>Dark</div>
+<div class="qtile" data-toggle="minimal" onclick="quickMinimal(this)"><span>◇</span>Minimal</div>
+<div class="qtile" data-toggle="labels" onclick="quickLabels(this)"><span>Aa</span>Labels</div>
+<div class="qtile" data-toggle="dock" onclick="quickDock(this)"><span>▱</span>Dock</div>
+<div class="qtile" data-toggle="clock" onclick="quickClock(this)"><span>◷</span>Clock</div>
+<div class="qtile" data-toggle="battery" onclick="toggleBatterySaver(this)"><span>▰</span>Battery</div>
+<div class="qtile" data-toggle="privacy" onclick="togglePrivacyMode(this)"><span>◉</span>Privacy</div>
+<div class="qtile" data-toggle="zen" onclick="toggleZen(this)"><span>✦</span>Zen</div>
+<div class="qtile" data-toggle="lock" onclick="lockNow()"><span>⌾</span>Lock</div>
+  </div>
+  <div class="notif">
+    <b style="color:#ffe8a3">Notificaciones</b>
+    <div class="notif-card"><div class="notif-row"><div class="notif-icon">✓</div><div><small>TLD</small><div id="notifText">Jayan OS listo.</div></div></div></div>
+  </div>
+</section>
+
+<div class="bg"></div>
+
+<section id="lock" class="lock">
+  <div>
+    <div id="lockTime" class="lock-time">--:--</div>
+    <div id="lockDate" class="lock-date"></div><div class="lock-status"><span id="lockBattery">BAT --</span><span id="lockNet">NET --</span><span>SECURE</span></div><div id="lockNotifications" class="lock-notifs"></div>
+  </div>
+  <div class="lock-brand">
+    <img src="icon-512.png" alt="">
+    <h2>JAYAN OS</h2>
+  </div>
+  <div style="width:min(420px,100%)"><div class="lock-actions"><button class="lock-action" onclick="event.stopPropagation();lockShortcut('camera')">◉</button><button class="lock-action" onclick="event.stopPropagation();lockShortcut('flash')">✦</button></div><button class="unlock" onclick="unlock()">DESBLOQUEAR JAYAN OS ♠</button><div class="lock-hint">TOCA PARA ENTRAR · HOME CORE READY</div></div>
+</section>
+
+<main class="screen">
+  <div class="status"><span id="clock">--:--</span><span onclick="toggleQuick(true)" style="cursor:pointer">♠ JAYAN OS · WEB 1.8 ▾</span></div>
+  <div class="home-clock-large">
+       <div id="homeBigClock" class="t">--:--</div>
+       <div id="homeBigDate" class="d"></div>
+     </div>
+     <section class="brand">
+    <img class="eye" src="icon-512.png" alt="">
+    <h1>JAYAN OS</h1><p>PERSONAL COMMAND SYSTEM</p>
+  </section>
+  <div class="searchbar-home">
+      <input id="globalSearch" placeholder="Buscar apps, comandos, notas…" onclick="openCommandPalette()" readonly>
+      <button onclick="openCommandPalette()">⌘</button>
+    </div>
+    <section class="jarvis">
+    <small>✦ JARVIS / QUICK COMMAND</small>
+    <div class="row"><input id="cmd" placeholder="Abre TLD, notas, ajustes, apps…"><button onclick="runCmd()">➤</button></div>
+  </section>
+  
+<section class="launcher-pages" id="launcherPages">
+  <div id="pageTrack" class="page-track">
+    <div class="home-page">
+      <div class="widget editable" data-widget="today">
+        <div class="widget-tools"><button onclick="editWidget('today')">✎</button></div>
+        <h4 id="widgetTitleToday">HOY</h4>
+        <div class="widget-row">
+          <div class="mini-widget"><b>Hora</b><div id="widgetClock">--:--</div></div>
+          <div class="mini-widget"><b>Notas</b><div id="widgetNoteCount">0</div><small>guardadas</small></div>
+        </div>
+      </div>
+      <section class="grid sortable-grid" data-page="0">
+        <div class="app" draggable="true" data-app="tld" onclick="appClick('tld')"><div class="ico">✓</div>TLD</div>
+        <div class="app" draggable="true" data-app="photos" onclick="appClick('photos')"><div class="ico">◉</div>Photos</div>
+        <div class="app" draggable="true" data-app="notes" onclick="appClick('notes')"><div class="ico">✎</div>Notes</div>
+        <div class="app" draggable="true" data-app="music" onclick="appClick('music')"><div class="ico">♫</div>Music</div>
+      </section>
+    </div>
+
+    <div class="home-page">
+      <div class="widget editable" data-widget="command">
+        <div class="widget-tools"><button onclick="editWidget('command')">✎</button></div>
+        <h4 id="widgetTitleCommand">COMMAND CENTER</h4>
+        <div class="big">♠ JAYAN OS</div>
+        <small>Desliza entre páginas · Mantén presionado para editar</small>
+      </div>
+      <div class="widget editable" data-widget="system">
+        <div class="widget-tools"><button onclick="editWidget('system')">✎</button></div>
+        <h4 id="widgetTitleSystem">SYSTEM</h4>
+        <div class="widget-system">
+          <div class="sysstat"><b id="sysBattery">--</b><small>Battery</small></div>
+          <div class="sysstat"><b id="sysOnline">--</b><small>Network</small></div>
+          <div class="sysstat"><b id="sysApps">8</b><small>Apps</small></div>
+        </div>
+      </div>
+      <section class="grid sortable-grid" data-page="1">
+        <div class="app" draggable="true" data-app="files" onclick="appClick('files')"><div class="ico">▣</div>Files</div>
+        <div class="app" draggable="true" data-app="search" onclick="appClick('search')"><div class="ico">⌕</div>Search</div>
+        <div class="app" draggable="true" data-app="jarvis" onclick="appClick('jarvis')"><div class="ico">✦</div>Jarvis</div>
+        <div class="app" draggable="true" data-app="settings" onclick="appClick('settings')"><div class="ico">⚙</div>Settings</div>
+      </section>
+    </div>
+
+    <div class="home-page">
+      <div class="widget editable" data-widget="widgets">
+        <div class="widget-tools"><button onclick="editWidget('widgets')">✎</button></div>
+        <h4 id="widgetTitleWidgets">WIDGETS</h4>
+        <div class="widget-row">
+          <div class="mini-widget"><b>TLD</b><div>✓</div><small>Disciplina</small></div>
+          <div class="mini-widget"><b>JARVIS</b><div>✦</div><small>Asistente</small></div>
+        </div>
+      </div>
+      <div class="widget">
+        <h4>ANDROID APPS <span class="native-badge">NATIVE BRIDGE</span></h4>
+        <small>Cuando Jayan OS se compile como launcher Android, aquí aparecerán las apps instaladas.</small>
+        <section class="grid" id="nativeAppsGrid"></section>
+      </div>
+      <section class="grid" id="customFolderGrid">
+        <div class="app" onclick="openFolder('tools')"><div class="ico">▦</div>Tools</div>
+        <div class="app" onclick="openFolder('media')"><div class="ico">▤</div>Media</div>
+      </section>
+    </div>
+  </div>
+  <div class="page-dots">
+    <span class="page-dot active"></span><span class="page-dot"></span><span class="page-dot"></span>
+  </div>
+</section>
+<div class="spacer"></div>
+
+  <nav class="dock">
+    <div class="app" onclick="openTLD()"><div class="ico">✓</div>TLD</div>
+    <div class="app" onclick="openNotes()"><div class="ico">✎</div>Notes</div>
+    <div class="app" onclick="placeholder('Jarvis')"><div class="ico">✦</div>Jarvis</div>
+    <div class="app" onclick="openDrawer()"><div class="ico">⊞</div>Apps</div>
+  </nav>
+</main>
+
+<section id="drawer" class="drawer">
+  <div class="drawer-head">
+    <input id="appSearch" placeholder="Buscar apps…" oninput="filterApps()">
+    <button class="close" onclick="closeDrawer()">Cerrar</button>
+  </div>
+  <div id="drawerGrid" class="drawer-grid">
+    <div class="app drawerApp" data-name="tld deberes" onclick="openTLD();closeDrawer()"><div class="ico">✓</div>TLD</div>
+    <div class="app drawerApp" data-name="photos fotos" onclick="placeholder('Photos')"><div class="ico">◉</div>Photos</div>
+    <div class="app drawerApp" data-name="notes notas" onclick="openNotes();closeDrawer()"><div class="ico">✎</div>Notes</div>
+    <div class="app drawerApp" data-name="music musica" onclick="placeholder('Music')"><div class="ico">♫</div>Music</div>
+    <div class="app drawerApp" data-name="files archivos" onclick="placeholder('Files')"><div class="ico">▣</div>Files</div>
+    <div class="app drawerApp" data-name="search buscar" onclick="placeholder('Search')"><div class="ico">⌕</div>Search</div>
+    <div class="app drawerApp" data-name="jarvis ai ia" onclick="placeholder('Jarvis')"><div class="ico">✦</div>Jarvis</div>
+    <div class="app drawerApp" data-name="settings ajustes configuracion" onclick="openSettings();closeDrawer()"><div class="ico">⚙</div>Settings</div>
+  </div>
+</section>
+
+
+
+
+<div id="commandPalette" class="command-palette">
+  <input id="commandInput" placeholder="Escribe una acción…" oninput="renderCommandResults()">
+  <div id="commandResults" class="command-results"></div>
+</div>
+
+<div id="focusOverlay" class="focus-overlay">
+  <div class="focus-card">
+    <h2>FOCUS MODE</h2>
+    <p id="focusLabel">Concentración</p>
+    <div id="focusTimer" class="focus-timer">25:00</div>
+    <div style="display:flex;justify-content:center;gap:8px">
+      <button onclick="toggleFocusTimer()">Start / Pause</button>
+      <button onclick="closeFocus()">Salir</button>
+    </div>
+  </div>
+</div>
+
+<div id="appmenu" class="appmenu">
+  <button onclick="renameSelectedApp()">✎ Renombrar</button>
+  <button onclick="hideSelectedApp()">◌ Ocultar</button>
+  <button onclick="addSelectedToFolder()">▦ Añadir a carpeta</button>
+  <button onclick="closeAppMenu()">Cancelar</button>
+</div>
+
+<div id="folder" class="folder">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <b id="folderTitle" style="color:#ffe8a3">Folder</b>
+    <button class="close" onclick="closeFolder()">Cerrar</button>
+  </div>
+  <div id="folderGrid" class="folder-grid"></div>
+</div>
+<div id="editbar" class="editbar">
+  <button onclick="exitEditMode()">✓ Listo</button>
+  <button onclick="createCustomFolder()">＋ Carpeta</button>
+  <button onclick="manageApps()">☰ Apps</button>
+  <button onclick="resetHomeLayout()">↺ Reset Home</button>
+</div>
+
+
+
+
+
+
+
+
+
+<div id="privacyDot" class="privacy-dot"></div>
+<div id="launcherSearch" class="launcher-search">
+ <input id="launcherSearchInput" placeholder="Search Jayan OS…" oninput="runUniversalSearch(this.value)" autocomplete="off">
+ <div id="launcherSearchResults"></div>
+ <button class="close" onclick="closeLauncherSearch()">Cerrar</button>
+</div>
+
+<div id="bootLogo" class="boot-logo"><div class="boot-core"><img src="icon-192.png"><h1>JAYAN OS</h1><small>CORE 1.6 · INITIALIZING</small></div></div>
+<div id="releaseCenter" class="release-center">
+ <h2 style="color:var(--accent2);letter-spacing:.12em">RELEASE CENTER</h2>
+ <div class="release-card"><b>Build</b><div>Jayan OS 1.6 · Android Release Candidate</div></div>
+ <div class="release-card"><b>Preflight</b><div id="preflightResult">Not checked</div><div class="release-grid"><button onclick="runPreflight()">Run Check</button><button onclick="makeRecoverySnapshot()">Snapshot</button></div></div>
+ <div class="release-card"><b>Android</b><div>Project is prepared for Android Studio compilation, signing and Home-app testing.</div></div>
+ <button class="close" onclick="closeReleaseCenter()">Cerrar</button>
+</div>
+
+<button id="voiceOrb" class="voice-orb" onclick="startLocalVoice()" title="Local Voice">◉</button>
+<div id="healthCenter" class="health-center">
+ <h2 style="color:var(--accent2);letter-spacing:.12em">SYSTEM HEALTH</h2>
+ <div class="health-card"><b>Jayan OS Core</b><div id="healthCore" class="health-ok">Checking…</div></div>
+ <div class="health-card"><b>Android Bridge</b><div id="healthNative">Checking…</div></div>
+ <div class="health-card"><b>Storage</b><div id="healthStorage">Checking…</div></div>
+ <div class="health-card"><b>Recovery</b><div>Safe Boot preserves your data while disabling heavy UI effects.</div><button onclick="toggleSafeBoot()">Toggle Safe Boot</button></div>
+ <div class="health-card"><b>Snapshot</b><div>Create a local emergency configuration snapshot before major changes.</div><button onclick="makeRecoverySnapshot()">Create Snapshot</button> <button onclick="restoreRecoverySnapshot()">Restore</button></div>
+ <button class="close" onclick="closeHealth()">Cerrar</button>
+</div>
+
+<div id="profileChip" class="profile-chip" onclick="openProfiles()">NORMAL</div>
+<div id="profileCenter" class="profile-center">
+ <h2 style="color:var(--accent2);letter-spacing:.12em">PROFILES</h2>
+ <div class="profile-grid">
+  <button class="profile-btn" onclick="setProfile('normal')"><span>◇</span>Normal</button>
+  <button class="profile-btn" onclick="setProfile('work')"><span>▣</span>Work</button>
+  <button class="profile-btn" onclick="setProfile('gym')"><span>⚡</span>Gym</button>
+  <button class="profile-btn" onclick="setProfile('night')"><span>☾</span>Night</button>
+  <button class="profile-btn" onclick="setProfile('minimal')"><span>—</span>Minimal</button>
+  <button class="profile-btn" onclick="togglePerformance()"><span>»</span>Performance</button>
+ </div>
+ <button class="close" onclick="closeProfiles()">Cerrar</button>
+</div>
+<div id="aod" class="aod" onclick="closeAOD()">
+ <div class="aod-core"><div id="aodTime" class="aod-time">00:00</div><div id="aodDate" class="aod-date"></div><div id="aodBat" class="aod-bat">BAT --</div></div>
+</div>
+
+<div id="controlHub" class="control-hub">
+ <h2 style="color:var(--accent2);letter-spacing:.12em">DEVICE CONTROL</h2>
+ <div class="control-grid">
+   <button class="control-tile" onclick="nativeControl('wifi')"><span>⌁</span>Wi-Fi</button>
+   <button class="control-tile" onclick="nativeControl('bluetooth')"><span>ᛒ</span>Bluetooth</button>
+   <button class="control-tile" onclick="nativeControl('settings')"><span>⚙</span>Settings</button>
+   <button class="control-tile" onclick="nativeControl('wallpaper')"><span>▧</span>Wallpaper</button>
+   <button class="control-tile" onclick="nativeControl('camera')"><span>◉</span>Camera</button>
+   <button class="control-tile" onclick="nativeControl('flash')"><span>✦</span>Flashlight</button>
+   <div class="control-tile control-wide"><span>☀</span>Brightness<div class="brightness-wrap"><input id="nativeBrightness" type="range" min="1" max="255" value="128" onchange="setNativeBrightness(this.value)"></div></div>
+ </div>
+ <button class="close" onclick="closeControlHub()">Cerrar</button>
+</div>
+
+<div id="notificationCenter" class="notif-center">
+  <h2 style="color:var(--accent2);letter-spacing:.12em">NOTIFICATIONS</h2>
+  <div id="notificationList"></div>
+  <button class="close" onclick="closeNotificationCenter()">Cerrar</button>
+</div>
+
+<div id="nativeCenter" class="native-center">
+  <h2 style="color:var(--accent2);letter-spacing:.12em">ANDROID CORE</h2>
+  <div class="native-card"><h3><span id="nativeDot" class="native-dot"></span>Native Bridge</h3><div id="nativeState">Web mode</div></div>
+  <div class="native-card"><h3>System Actions</h3><div class="native-actions">
+    <button onclick="nativeAction('settings')">⚙ Android Settings</button>
+    <button onclick="nativeAction('wallpaper')">▧ Wallpaper</button>
+    <button onclick="nativeAction('camera')">◉ Camera</button>
+    <button onclick="nativeAction('flash')">✦ Flashlight</button>
+  </div></div>
+  <div class="native-card"><h3>Installed Apps</h3>
+<input id="nativeAppSearch" class="native-search" placeholder="Buscar apps instaladas…" oninput="renderAllNativeApps(this.value)">
+<div id="allNativeApps" class="app-drawer-native"></div></div>
+<div class="permission-card"><b>Notification Access</b><div style="font-size:11px;color:#9a8a62;margin-top:5px">Necesario para badges y Notification Center.</div><button onclick="openNotifPermission()">Autorizar en Android</button></div>
+<div class="native-card"><h3>Device</h3><div id="deviceInfo">Loading…</div></div>
+  <button class="close" onclick="closeNativeCenter()">Cerrar</button>
+</div>
+
+<div id="recents" class="recents">
+  <h2>RECENTS</h2>
+  <div id="recentList"></div>
+  <button class="close" onclick="closeRecents()">Cerrar</button>
+</div>
+<div class="smart-dock">
+  <button onclick="setPage(0)" title="Home">⌂</button>
+  <button onclick="openDrawer()" title="Apps">▦</button>
+  <button onclick="openCommandPalette()" title="Search">⌕</button>
+  <button onclick="openRecents()" title="Recents">▤</button>
+</div>
+<div class="gesture-pill"></div>
+
+<div id="module" class="overlay"><div class="topbar"><button class="close" onclick="closeModule()">♠ Home</button></div><iframe id="frame"></iframe></div>
+
+<div id="sheet" class="sheet">
+  <h3 id="sheetTitle"></h3>
+  <div id="sheetContent"></div>
+  <div style="margin-top:14px"><button onclick="closeSheet()">Cerrar</button></div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const clock=$('#clock'), lockTime=$('#lockTime'), lockDate=$('#lockDate');
+const moduleEl=$('#module'), frame=$('#frame'), sheet=$('#sheet'), drawer=$('#drawer'), toast=$('#toast');
+
+function tick(){
+  const d=new Date();
+  const t=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  clock.textContent=t; lockTime.textContent=t;
+  lockDate.textContent=d.toLocaleDateString('es-US',{weekday:'long',month:'long',day:'numeric'});
+}
+tick();setInterval(tick,1000);
+
+function unlock(){localStorage.setItem('jayan_os_locked','0');$('#lock').classList.add('hidden')}
+function lockNow(){localStorage.setItem('jayan_os_locked','1');$('#lock').classList.remove('hidden');closeSheet()}
+if(localStorage.getItem('jayan_os_locked')==='0') $('#lock').classList.add('hidden');
+
+function openTLD(){frame.src='tld.html';moduleEl.classList.add('show')}
+function closeModule(){moduleEl.classList.remove('show');frame.src='about:blank'}
+
+function placeholder(name){
+  $('#sheetTitle').textContent=name+' · Próximo módulo';
+  $('#sheetContent').innerHTML='<p>El espacio para <b>'+name+'</b> ya forma parte de Jayan OS. En esta versión se mantiene reservado para no mezclar funciones incompletas con TLD.</p>';
+  sheet.classList.add('show')
+}
+function closeSheet(){sheet.classList.remove('show')}
+
+function openNotes(){
+  const n=localStorage.getItem('jayan_os_notes')||'';
+  $('#sheetTitle').textContent='Notes';
+  $('#sheetContent').innerHTML='<textarea id="notearea" class="notearea" placeholder="Notas rápidas…"></textarea><div style="margin-top:10px"><button onclick="saveNotes()">Guardar</button></div>';
+  $('#notearea').value=n; sheet.classList.add('show')
+}
+function saveNotes(){localStorage.setItem('jayan_os_notes',$('#notearea').value);showToast('Nota guardada');}
+
+function openDrawer(){drawer.classList.add('show');$('#appSearch').value='';filterApps()}
+function closeDrawer(){drawer.classList.remove('show')}
+function filterApps(){
+  const q=$('#appSearch').value.trim().toLowerCase();
+  document.querySelectorAll('.drawerApp').forEach(el=>{
+    el.style.display=el.dataset.name.includes(q)?'block':'none'
+  })
+}
+
+function openSettings(){
+  const density=localStorage.getItem('jayan_os_density')||'58';
+  const blur=localStorage.getItem('jayan_os_blur')||'18';
+  const lockOnLaunch=(localStorage.getItem('jayan_os_lock_launch')??'1')==='1';
+  $('#sheetTitle').textContent='Settings';
+  $('#sheetContent').innerHTML=`
+    <div class="settings-row"><label>Pantalla de bloqueo</label><input id="lockLaunch" type="checkbox" ${lockOnLaunch?'checked':''}></div>
+    <div class="settings-row"><label>Tamaño de iconos</label><input id="density" type="range" min="48" max="72" value="${density}"></div>
+    <div class="settings-row"><label>Desenfoque UI</label><input id="blur" type="range" min="0" max="28" value="${blur}"></div>
+    <div class="wallpaper-preview"></div>
+    <div class="settings-row"><label>Fondo</label>
+      <select id="wallpaper">
+        <option value="hero">Hero actual</option>
+        <option value="eye">Ojo místico</option>
+        <option value="plain">Negro limpio</option>
+      </select>
+    </div>
+    <div class="settings-row"><label>Bloquear ahora</label><button onclick="lockNow()">🔒 Lock</button></div>
+    <div class="settings-row"><label>Reducir animaciones</label><input id="reduceMotion" type="checkbox"></div>
+    <div class="settings-row"><label>Alto contraste</label><input id="highContrast" type="checkbox"></div>
+    <div class="settings-row"><label>Modo seguro</label><input id="safeMode" type="checkbox"></div>
+    <div class="settings-row"><label>Densidad</label>
+      <select id="densityMode"><option value="normal">Normal</option><option value="compact">Compacta</option><option value="large">Grande</option></select>
+    </div>
+    <div class="settings-row"><label>Focus Mode</label><button onclick="startFocusFromSettings()">25 min</button></div>
+    <div class="settings-row"><label>Backup Jayan OS</label><button onclick="openBackup()">Abrir</button></div>
+    <div style="margin-top:14px;color:var(--accent2);font-weight:700">APARIENCIA</div>
+    <div class="settings-row"><label>Tema</label>
+      <select id="themeMode">
+        <option value="obsidian">Obsidian Gold</option>
+        <option value="royal">Royal Blue</option>
+        <option value="emerald">Emerald</option>
+        <option value="crimson">Crimson</option>
+        <option value="mono">Monochrome</option>
+      </select>
+    </div>
+    <div class="settings-row"><label>Forma de iconos</label>
+      <select id="iconShape">
+        <option value="soft">Soft</option>
+        <option value="circle">Circle</option>
+        <option value="square">Square</option>
+      </select>
+    </div>
+    <div class="settings-row"><label>Transparencia paneles</label><input id="panelAlpha" class="custom-slider" type="range" min="45" max="95" value="78"></div>
+    <div class="settings-row"><label>Transparencia dock</label><input id="dockAlpha" class="custom-slider" type="range" min="35" max="95" value="79"></div>
+    <div class="settings-row"><label>Oscurecer fondo</label><input id="wallDim" class="custom-slider" type="range" min="0" max="90" value="44"></div>
+    <div class="settings-row"><label>Blur del fondo</label><input id="wallBlur" class="custom-slider" type="range" min="0" max="18" value="0"></div>
+    <div class="settings-row"><label>Zoom fondo</label><input id="wallScale" class="custom-slider" type="range" min="100" max="120" value="100"></div>
+    <div class="settings-row"><label>Ocultar nombres de apps</label><input id="labelsHidden" type="checkbox"></div>
+    <div class="settings-row"><label>Ocultar dock</label><input id="dockHidden" type="checkbox"></div>
+    <div class="settings-row"><label>Ocultar reloj grande</label><input id="clockHidden" type="checkbox"></div>
+    <div class="settings-row"><label>Home minimalista</label><input id="minimalHome" type="checkbox"></div>
+    <div class="settings-row"><label>Glass intenso</label><input id="glassStrong" type="checkbox"></div>
+    <div class="settings-row"><label>Desactivar sombras</label><input id="shadowOff" type="checkbox"></div>
+    <div class="settings-row"><label>Ocultar barra superior</label><input id="statusHidden" type="checkbox"></div>
+
+    <div style="margin-top:14px;color:var(--accent2);font-weight:700">FONDO</div>
+    <div class="wallpaper-tools">
+      <button class="wall-option" style="background-image:url('hero-v54.jpg')" onclick="chooseWallpaper('hero')"><span>Hero</span></button>
+      <button class="wall-option" style="background-image:url('a_dark_dramatic_app_dashboard_ui_screenshot_with.png')" onclick="chooseWallpaper('eye')"><span>Eye</span></button>
+      <button class="wall-option" onclick="chooseWallpaper('plain')"><span>Black</span></button>
+    </div>
+    <div class="settings-row"><label>Usar imagen propia</label><button onclick="document.getElementById('customWallpaperFile').click()">Elegir</button></div>
+    <input id="customWallpaperFile" type="file" accept="image/*" style="display:none" onchange="loadCustomWallpaper(this.files[0])">
+
+    
+<div style="margin-top:14px;color:var(--accent2);font-weight:700">HOME & LOCK SCREEN</div>
+<div class="settings-row"><label>Fondo Home</label><button onclick="document.getElementById('homeWallFile').click()">Elegir imagen</button></div>
+<input id="homeWallFile" type="file" accept="image/*" style="display:none" onchange="loadSeparateWallpaper(this.files[0],'home')">
+<div class="settings-row"><label>Fondo Lock Screen</label><button onclick="document.getElementById('lockWallFile').click()">Elegir imagen</button></div>
+<input id="lockWallFile" type="file" accept="image/*" style="display:none" onchange="loadSeparateWallpaper(this.files[0],'lock')">
+<div class="settings-row"><label>Usar fondos incluidos</label><button onclick="applyDefaultSeparateWalls()">Aplicar</button></div>
+
+<div style="margin-top:14px;color:var(--accent2);font-weight:700">MOTION & PANELS</div>
+<div class="settings-row"><label>Panel fluido</label><input id="fluidPanel" type="checkbox" checked></div>
+<div class="settings-row"><label>Animación Lock Screen</label><input id="lockFX" type="checkbox" checked></div>
+<div class="settings-row"><label>Cyber glow</label><input id="cyberGlow" type="checkbox" checked></div>
+
+<div style="margin-top:14px;color:var(--accent2);font-weight:700">SMART OS</div>
+<div class="settings-row"><label>Dynamic Theme</label><input id="dynamicTheme" type="checkbox"></div>
+<div class="settings-row"><label>Haptic Feedback</label><input id="hapticFeedback" type="checkbox" checked></div>
+<div class="settings-row"><label>Performance Mode</label><input id="performanceMode" type="checkbox"></div>
+<div class="settings-row"><label>AOD / OLED Clock</label><button onclick="openAOD()">Abrir</button></div>
+<div class="settings-row"><label>Profiles</label><button onclick="openProfiles()">Abrir</button></div>
+<div style="margin-top:14px;color:var(--accent2);font-weight:700">SISTEMA</div>
+    <div class="settings-row"><label>Restablecer solo apariencia</label><button onclick="resetAppearance()">Reset UI</button></div>
+    <div class="settings-row"><label>Restablecer ajustes de Jayan OS</label><button onclick="resetSettings()">Reset</button></div>
+    <div style="margin-top:14px"><button onclick="saveSettings()">Guardar ajustes</button></div>`;
+  sheet.classList.add('show')
+}
+function saveSettings(){
+  const density=$('#density').value, blur=$('#blur').value, lockLaunch=$('#lockLaunch').checked?'1':'0';
+  localStorage.setItem('jayan_os_density',density);localStorage.setItem('jayan_os_blur',blur);localStorage.setItem('jayan_os_lock_launch',lockLaunch);
+  applySettings();showToast('Ajustes guardados')
+}
+function resetSettings(){
+  ['jayan_os_density','jayan_os_blur','jayan_os_lock_launch'].forEach(k=>localStorage.removeItem(k));
+  document.documentElement.style.setProperty('--icon','58px');document.documentElement.style.setProperty('--blur','18px');
+  showToast('Ajustes restablecidos');openSettings()
+}
+function applySettings(){
+  document.documentElement.style.setProperty('--icon',(localStorage.getItem('jayan_os_density')||58)+'px');
+  document.documentElement.style.setProperty('--blur',(localStorage.getItem('jayan_os_blur')||18)+'px');
+}
+applySettings();
+
+function showToast(msg){toast.textContent=msg;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)}
+
+function runCmd(){
+  let q=$('#cmd').value.trim().toLowerCase(); if(!q)return;
+  if(q.includes('tld')||q.includes('deber'))openTLD();
+  else if(q.includes('nota'))openNotes();
+  else if(q.includes('ajuste')||q.includes('setting')||q.includes('config'))openSettings();
+  else if(q.includes('app'))openDrawer();
+  else if(q.includes('bloque'))lockNow();
+  else if(q.includes('foto'))placeholder('Photos');
+  else if(q.includes('música')||q.includes('musica'))placeholder('Music');
+  else placeholder('Jarvis');
+  $('#cmd').value=''
+}
+$('#cmd').addEventListener('keydown',e=>{if(e.key==='Enter')runCmd()});
+
+window.addEventListener('load',()=>{
+  const mustLock=(localStorage.getItem('jayan_os_lock_launch')??'1')==='1';
+  if(mustLock && sessionStorage.getItem('jayan_os_seen')!=='1'){
+    $('#lock').classList.remove('hidden');localStorage.setItem('jayan_os_locked','1')
+  }
+  sessionStorage.setItem('jayan_os_seen','1')
+});
+
+
+function toggleQuick(force){
+  const qp=document.getElementById('quickpanel');
+  if(force===true) qp.classList.add('show');
+  else if(force===false) qp.classList.remove('show');
+  else qp.classList.toggle('show');
+}
+function toggleTile(el){
+  el.classList.toggle('on');
+  const key='jayan_os_qs_'+el.dataset.toggle;
+  localStorage.setItem(key,el.classList.contains('on')?'1':'0');
+  if(el.dataset.toggle==='focus') showToast(el.classList.contains('on')?'Focus activado':'Focus desactivado');
+}
+function restoreTiles(){
+  document.querySelectorAll('.qtile[data-toggle]').forEach(el=>{
+    const v=localStorage.getItem('jayan_os_qs_'+el.dataset.toggle);
+    if(v!==null) el.classList.toggle('on',v==='1');
+  });
+}
+restoreTiles();
+
+function setWallpaper(mode){
+  let value="url('hero-v54.jpg')";
+  if(mode==='eye') value="url('a_dark_dramatic_app_dashboard_ui_screenshot_with.png')";
+  if(mode==='plain') value="linear-gradient(#050505,#000)";
+  document.documentElement.style.setProperty('--wallpaper',value);
+}
+function restoreWallpaper(){
+  setWallpaper(localStorage.getItem('jayan_os_wallpaper')||'hero');
+}
+restoreWallpaper();
+
+const _oldOpenSettings=openSettings;
+openSettings=function(){
+  _oldOpenSettings();
+  const w=localStorage.getItem('jayan_os_wallpaper')||'hero';
+  const sel=document.getElementById('wallpaper'); if(sel) sel.value=w;
+}
+const _oldSaveSettings=saveSettings;
+saveSettings=function(){
+  const sel=document.getElementById('wallpaper');
+  if(sel){localStorage.setItem('jayan_os_wallpaper',sel.value);setWallpaper(sel.value);}
+  _oldSaveSettings();
+}
+
+let touchStartY=0,touchStartX=0;
+document.addEventListener('touchstart',e=>{
+  if(!e.touches?.length)return;
+  touchStartY=e.touches[0].clientY; touchStartX=e.touches[0].clientX;
+},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(!e.changedTouches?.length)return;
+  const y=e.changedTouches[0].clientY, x=e.changedTouches[0].clientX;
+  const dy=y-touchStartY, dx=x-touchStartX;
+  if(touchStartY<80 && dy>80){toggleQuick(true);return;}
+  if(Math.abs(dx)>90 && Math.abs(dx)>Math.abs(dy)){
+    const target=e.target;
+    if(target && target.closest && target.closest('#launcherPages')) return;
+    if(dx<0) openDrawer();
+    else closeDrawer();
+  }
+},{passive:true});
+
+setInterval(()=>{
+  const d=new Date();
+  const qt=document.getElementById('qTime'),qd=document.getElementById('qDate');
+  if(qt) qt.textContent=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  if(qd) qd.textContent=d.toLocaleDateString('es-US',{weekday:'short',month:'short',day:'numeric'});
+},1000);
+
+
+const launcherState={page:0,edit:false,touchX:0,touchY:0,longPress:null,dragEl:null};
+
+function appClick(name){
+  if(launcherState.edit) return;
+  const map={
+    tld:()=>openTLD(), photos:()=>placeholder('Photos'), notes:()=>openNotes(), music:()=>placeholder('Music'),
+    files:()=>placeholder('Files'), search:()=>placeholder('Search'), jarvis:()=>placeholder('Jarvis'), settings:()=>openSettings()
+  };
+  (map[name]||(()=>{}))();
+}
+
+function setPage(i){
+  launcherState.page=Math.max(0,Math.min(2,i));
+  document.getElementById('pageTrack').style.transform=`translateX(-${launcherState.page*33.3333}%)`;
+  document.querySelectorAll('.page-dot').forEach((d,idx)=>d.classList.toggle('active',idx===launcherState.page));
+  localStorage.setItem('jayan_os_home_page',String(launcherState.page));
+}
+
+function restorePage(){setPage(parseInt(localStorage.getItem('jayan_os_home_page')||'0',10)||0)}
+restorePage();
+
+function enterEditMode(){
+  launcherState.edit=true;
+  document.body.classList.add('editmode');
+  document.getElementById('editbar').classList.add('show');
+  showToast('Modo edición: arrastra iconos');
+}
+function exitEditMode(){
+  launcherState.edit=false;
+  document.body.classList.remove('editmode');
+  document.getElementById('editbar').classList.remove('show');
+  saveHomeLayout();
+}
+
+document.querySelectorAll('.sortable-grid .app').forEach(el=>{
+  el.addEventListener('pointerdown',()=>{
+    launcherState.longPress=setTimeout(()=>enterEditMode(),650);
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,()=>clearTimeout(launcherState.longPress)));
+
+  el.addEventListener('dragstart',e=>{
+    if(!launcherState.edit){e.preventDefault();return;}
+    launcherState.dragEl=el;el.classList.add('dragging');
+    e.dataTransfer.effectAllowed='move';
+  });
+  el.addEventListener('dragend',()=>{el.classList.remove('dragging');launcherState.dragEl=null;saveHomeLayout()});
+});
+
+document.querySelectorAll('.sortable-grid').forEach(grid=>{
+  grid.addEventListener('dragover',e=>{
+    if(!launcherState.edit||!launcherState.dragEl)return;
+    e.preventDefault();
+    const after=[...grid.querySelectorAll('.app:not(.dragging)')].find(child=>{
+      const r=child.getBoundingClientRect();
+      return e.clientY<r.top+r.height/2;
+    });
+    if(after) grid.insertBefore(launcherState.dragEl,after); else grid.appendChild(launcherState.dragEl);
+  });
+});
+
+function saveHomeLayout(){
+  const layout=[...document.querySelectorAll('.sortable-grid')].map(g=>[...g.querySelectorAll('.app')].map(a=>a.dataset.app));
+  localStorage.setItem('jayan_os_home_layout',JSON.stringify(layout));
+}
+function restoreHomeLayout(){
+  try{
+    const layout=JSON.parse(localStorage.getItem('jayan_os_home_layout')||'null');
+    if(!layout)return;
+    const lookup={};
+    document.querySelectorAll('.sortable-grid .app').forEach(a=>lookup[a.dataset.app]=a);
+    document.querySelectorAll('.sortable-grid').forEach((g,idx)=>{
+      (layout[idx]||[]).forEach(name=>{if(lookup[name])g.appendChild(lookup[name])});
+    });
+  }catch{}
+}
+restoreHomeLayout();
+
+function resetHomeLayout(){
+  localStorage.removeItem('jayan_os_home_layout');
+  location.reload();
+}
+
+function openFolder(kind){
+  const folder=document.getElementById('folder'),grid=document.getElementById('folderGrid'),title=document.getElementById('folderTitle');
+  const data={
+    tools:[['Search','⌕','search'],['Files','▣','files'],['Settings','⚙','settings'],['Jarvis','✦','jarvis']],
+    media:[['Photos','◉','photos'],['Music','♫','music'],['Notes','✎','notes'],['TLD','✓','tld']]
+  };
+  title.textContent=kind==='tools'?'Tools':'Media';
+  grid.innerHTML=(data[kind]||[]).map(x=>`<div class="app" onclick="closeFolder();appClick('${x[2]}')"><div class="ico">${x[1]}</div>${x[0]}</div>`).join('');
+  folder.classList.add('show');
+}
+function closeFolder(){document.getElementById('folder').classList.remove('show')}
+
+const lp=document.getElementById('launcherPages');
+lp.addEventListener('touchstart',e=>{
+  if(!e.touches?.length)return;
+  launcherState.touchX=e.touches[0].clientX; launcherState.touchY=e.touches[0].clientY;
+},{passive:true});
+lp.addEventListener('touchend',e=>{
+  if(!e.changedTouches?.length||launcherState.edit)return;
+  const dx=e.changedTouches[0].clientX-launcherState.touchX;
+  const dy=e.changedTouches[0].clientY-launcherState.touchY;
+  if(Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)*1.15){
+    if(dx<0 && launcherState.page<2) setPage(launcherState.page+1);
+    else if(dx>0 && launcherState.page>0) setPage(launcherState.page-1);
+  }
+},{passive:true});
+
+function updateLauncherWidgets(){
+  const wc=document.getElementById('widgetClock');
+  if(wc) wc.textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const wn=document.getElementById('widgetNoteCount');
+  if(wn) wn.textContent=(localStorage.getItem('jayan_os_notes')||'').trim()?1:0;
+}
+updateLauncherWidgets();setInterval(updateLauncherWidgets,1000);
+
+
+const APP_DEFAULTS={
+ tld:'TLD',photos:'Photos',notes:'Notes',music:'Music',files:'Files',search:'Search',jarvis:'Jarvis',settings:'Settings'
+};
+let selectedAppName=null;
+
+function getAppLabels(){try{return JSON.parse(localStorage.getItem('jayan_os_app_labels')||'{}')}catch{return {}}}
+function getHiddenApps(){try{return JSON.parse(localStorage.getItem('jayan_os_hidden_apps')||'[]')}catch{return []}}
+function applyAppCustomizations(){
+  const labels=getAppLabels(), hidden=getHiddenApps();
+  document.querySelectorAll('[data-app]').forEach(el=>{
+    const key=el.dataset.app;
+    const label=labels[key]||APP_DEFAULTS[key]||key;
+    // text node after icon
+    [...el.childNodes].forEach(n=>{if(n.nodeType===3 && n.textContent.trim()) n.textContent=label});
+    el.classList.toggle('hidden-app',hidden.includes(key));
+  });
+}
+applyAppCustomizations();
+
+function openAppMenuFor(el,x,y){
+  if(!launcherState.edit)return;
+  selectedAppName=el.dataset.app;
+  const menu=document.getElementById('appmenu');
+  menu.style.left=Math.min(x,window.innerWidth-225)+'px';
+  menu.style.top=Math.min(y,window.innerHeight-240)+'px';
+  menu.classList.add('show');
+}
+function closeAppMenu(){document.getElementById('appmenu').classList.remove('show');selectedAppName=null}
+
+document.querySelectorAll('.sortable-grid .app').forEach(el=>{
+  el.addEventListener('contextmenu',e=>{e.preventDefault();openAppMenuFor(el,e.clientX,e.clientY)});
+  let lp2=null;
+  el.addEventListener('pointerdown',e=>{
+    lp2=setTimeout(()=>{ if(launcherState.edit) openAppMenuFor(el,e.clientX||30,e.clientY||120); },1100);
+  });
+  ['pointerup','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,()=>clearTimeout(lp2)));
+});
+
+function renameSelectedApp(){
+  if(!selectedAppName)return;
+  const labels=getAppLabels();
+  const current=labels[selectedAppName]||APP_DEFAULTS[selectedAppName]||selectedAppName;
+  const v=prompt('Nuevo nombre:',current);
+  if(v&&v.trim()){labels[selectedAppName]=v.trim();localStorage.setItem('jayan_os_app_labels',JSON.stringify(labels));applyAppCustomizations()}
+  closeAppMenu();
+}
+function hideSelectedApp(){
+  if(!selectedAppName)return;
+  const hidden=getHiddenApps();
+  if(!hidden.includes(selectedAppName))hidden.push(selectedAppName);
+  localStorage.setItem('jayan_os_hidden_apps',JSON.stringify(hidden));
+  applyAppCustomizations();closeAppMenu();showToast('App oculta');
+}
+function unhideApp(name){
+  let hidden=getHiddenApps().filter(x=>x!==name);
+  localStorage.setItem('jayan_os_hidden_apps',JSON.stringify(hidden));applyAppCustomizations();manageApps();
+}
+function manageApps(){
+  const hidden=getHiddenApps(), labels=getAppLabels();
+  document.getElementById('sheetTitle').textContent='Administrar apps';
+  document.getElementById('sheetContent').innerHTML='<div class="manage-list">'+Object.keys(APP_DEFAULTS).map(k=>{
+    const label=labels[k]||APP_DEFAULTS[k];
+    return `<div class="manage-row"><div class="grow"><b>${label}</b><br><small>${hidden.includes(k)?'Oculta':'Visible'}</small></div>
+      ${hidden.includes(k)?`<button onclick="unhideApp('${k}')">Mostrar</button>`:`<button onclick="selectedAppName='${k}';hideSelectedApp();manageApps()">Ocultar</button>`}
+    </div>`;
+  }).join('')+'</div>';
+  sheet.classList.add('show');
+}
+
+function getCustomFolders(){try{return JSON.parse(localStorage.getItem('jayan_os_custom_folders')||'[]')}catch{return []}}
+function saveCustomFolders(v){localStorage.setItem('jayan_os_custom_folders',JSON.stringify(v));renderCustomFolders()}
+function createCustomFolder(){
+  const name=prompt('Nombre de la carpeta:','Nueva carpeta');
+  if(!name||!name.trim())return;
+  const folders=getCustomFolders();
+  folders.push({id:'f'+Date.now(),name:name.trim(),apps:[]});
+  saveCustomFolders(folders);showToast('Carpeta creada');
+}
+function renderCustomFolders(){
+  const grid=document.getElementById('customFolderGrid'); if(!grid)return;
+  grid.querySelectorAll('.custom-folder').forEach(x=>x.remove());
+  getCustomFolders().forEach(f=>{
+    const el=document.createElement('div');
+    el.className='app custom-folder';
+    el.innerHTML=`<div class="ico">▦</div>${f.name}<div class="custom-folder-badge">${f.apps.length} apps</div>`;
+    el.onclick=()=>openCustomFolder(f.id);
+    grid.appendChild(el);
+  });
+}
+function openCustomFolder(id){
+  const f=getCustomFolders().find(x=>x.id===id); if(!f)return;
+  const folder=document.getElementById('folder'),grid=document.getElementById('folderGrid'),title=document.getElementById('folderTitle');
+  title.textContent=f.name;
+  grid.innerHTML=f.apps.length?f.apps.map(k=>{
+    const labels=getAppLabels(); const label=labels[k]||APP_DEFAULTS[k]||k;
+    const icons={tld:'✓',photos:'◉',notes:'✎',music:'♫',files:'▣',search:'⌕',jarvis:'✦',settings:'⚙'};
+    return `<div class="app" onclick="closeFolder();appClick('${k}')"><div class="ico">${icons[k]||'◇'}</div>${label}</div>`;
+  }).join(''):'<p style="grid-column:1/-1;color:#aa9565">Carpeta vacía.</p>';
+  folder.classList.add('show');
+}
+function addSelectedToFolder(){
+  if(!selectedAppName)return;
+  let folders=getCustomFolders();
+  if(!folders.length){closeAppMenu();createCustomFolder();folders=getCustomFolders();if(!folders.length)return;}
+  const names=folders.map((f,i)=>`${i+1}. ${f.name}`).join('\n');
+  const pick=parseInt(prompt('Elige carpeta:\n'+names,'1'),10)-1;
+  if(!folders[pick])return;
+  if(!folders[pick].apps.includes(selectedAppName))folders[pick].apps.push(selectedAppName);
+  saveCustomFolders(folders);closeAppMenu();showToast('Añadida a carpeta');
+}
+renderCustomFolders();
+
+function editWidget(which){
+  const key='jayan_os_widget_title_'+which;
+  const current=localStorage.getItem(key)||({today:'HOY',command:'COMMAND CENTER',widgets:'WIDGETS'}[which]);
+  const v=prompt('Título del widget:',current);
+  if(v&&v.trim()){localStorage.setItem(key,v.trim());applyWidgetTitles()}
+}
+function applyWidgetTitles(){
+  const map={today:'widgetTitleToday',command:'widgetTitleCommand',widgets:'widgetTitleWidgets'};
+  Object.entries(map).forEach(([k,id])=>{
+    const el=document.getElementById(id); if(el)el.textContent=localStorage.getItem('jayan_os_widget_title_'+k)||({today:'HOY',command:'COMMAND CENTER',widgets:'WIDGETS'}[k]);
+  });
+}
+applyWidgetTitles();
+
+
+// ---------- JAYAN OS V0.6 CORE ----------
+const JayanBridge={
+  available:()=>typeof AndroidBridge!=='undefined',
+  getApps:()=>{
+    if(!JayanBridge.available()) return [];
+    try{return JSON.parse(AndroidBridge.getInstalledApps())}catch{return []}
+  },
+  openApp:(pkg)=>{
+    if(JayanBridge.available()) AndroidBridge.openApp(pkg);
+    else showToast('Disponible al compilar como launcher Android');
+  },
+  battery:()=>{
+    if(JayanBridge.available()){
+      try{return AndroidBridge.getBatteryPercent()+'%'}catch{}
+    }
+    return null;
+  }
+};
+
+const commandCatalog=[
+  {name:'Abrir TLD',hint:'app',run:()=>openTLD()},
+  {name:'Abrir Notes',hint:'app',run:()=>openNotes()},
+  {name:'Abrir Settings',hint:'app',run:()=>openSettings()},
+  {name:'Abrir App Drawer',hint:'launcher',run:()=>openDrawer()},
+  {name:'Bloquear Jayan OS',hint:'system',run:()=>lockNow()},
+  {name:'Focus 25 minutos',hint:'focus',run:()=>openFocus(25)},
+  {name:'Backup / Restore',hint:'data',run:()=>openBackup()},
+  {name:'Mostrar apps ocultas',hint:'launcher',run:()=>manageApps()},
+  {name:'Ir a Home 1',hint:'home',run:()=>setPage(0)},
+  {name:'Ir a Home 2',hint:'home',run:()=>setPage(1)},
+  {name:'Ir a Home 3',hint:'home',run:()=>setPage(2)}
+];
+
+function openCommandPalette(){
+  document.getElementById('commandPalette').classList.add('show');
+  const inp=document.getElementById('commandInput');inp.value='';renderCommandResults();setTimeout(()=>inp.focus(),50);
+}
+function closeCommandPalette(){document.getElementById('commandPalette').classList.remove('show')}
+function renderCommandResults(){
+  const q=(document.getElementById('commandInput').value||'').toLowerCase().trim();
+  const nativeApps=JayanBridge.getApps().map(a=>({name:a.label,hint:'android',run:()=>JayanBridge.openApp(a.packageName)}));
+  const results=[...commandCatalog,...nativeApps].filter(x=>!q||x.name.toLowerCase().includes(q)).slice(0,20);
+  document.getElementById('commandResults').innerHTML=results.map((x,i)=>`<div class="command-item" data-i="${i}">${x.name}<small>${x.hint}</small></div>`).join('');
+  [...document.querySelectorAll('.command-item')].forEach((el,i)=>el.onclick=()=>{results[i].run();closeCommandPalette()});
+}
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCommandPalette()}
+  if(e.key==='Escape'){closeCommandPalette();closeAppMenu();closeFolder()}
+});
+
+function renderNativeApps(){
+  const grid=document.getElementById('nativeAppsGrid'); if(!grid)return;
+  const apps=JayanBridge.getApps();
+  if(!apps.length){
+    grid.innerHTML='<div style="grid-column:1/-1;color:#8f7c55;font-size:12px">Web mode · native apps aparecerán aquí en Android.</div>';
+    return;
+  }
+  grid.innerHTML=apps.slice(0,20).map(a=>`<div class="app" onclick="JayanBridge.openApp('${a.packageName.replace(/'/g,"")}')"><div class="ico native-app-icon">◇</div>${a.label}</div>`).join('');
+  document.getElementById('sysApps').textContent=apps.length;
+}
+renderNativeApps();
+
+async function updateSystemWidget(){
+  const bat=document.getElementById('sysBattery');
+  const native=JayanBridge.battery();
+  if(native) bat.textContent=native;
+  else if(navigator.getBattery){
+    try{const b=await navigator.getBattery();bat.textContent=Math.round(b.level*100)+'%'}catch{bat.textContent='--'}
+  } else bat.textContent='--';
+  document.getElementById('sysOnline').textContent=navigator.onLine?'Online':'Offline';
+}
+updateSystemWidget();setInterval(updateSystemWidget,30000);
+window.addEventListener('online',updateSystemWidget);window.addEventListener('offline',updateSystemWidget);
+
+function getSettingsState(){
+  return {
+    reduceMotion:localStorage.getItem('jayan_os_reduce_motion')==='1',
+    highContrast:localStorage.getItem('jayan_os_high_contrast')==='1',
+    safeMode:localStorage.getItem('jayan_os_safe_mode')==='1',
+    densityMode:localStorage.getItem('jayan_os_density_mode')||'normal'
+  }
+}
+function applyAdvancedSettings(){
+  const s=getSettingsState();
+  document.body.classList.toggle('reduce-motion',s.reduceMotion);
+  document.body.classList.toggle('high-contrast',s.highContrast);
+  document.body.classList.toggle('safe-mode',s.safeMode);
+  document.body.classList.remove('compact','large');
+  if(s.densityMode==='compact')document.body.classList.add('compact');
+  if(s.densityMode==='large')document.body.classList.add('large');
+}
+applyAdvancedSettings();
+
+const __openSettings=openSettings;
+openSettings=function(){
+  __openSettings();
+  const s=getSettingsState();
+  const rm=document.getElementById('reduceMotion'),hc=document.getElementById('highContrast'),sm=document.getElementById('safeMode'),dm=document.getElementById('densityMode');
+  if(rm)rm.checked=s.reduceMotion;if(hc)hc.checked=s.highContrast;if(sm)sm.checked=s.safeMode;if(dm)dm.value=s.densityMode;
+}
+const __saveSettings=saveSettings;
+saveSettings=function(){
+  const rm=document.getElementById('reduceMotion'),hc=document.getElementById('highContrast'),sm=document.getElementById('safeMode'),dm=document.getElementById('densityMode');
+  if(rm)localStorage.setItem('jayan_os_reduce_motion',rm.checked?'1':'0');
+  if(hc)localStorage.setItem('jayan_os_high_contrast',hc.checked?'1':'0');
+  if(sm)localStorage.setItem('jayan_os_safe_mode',sm.checked?'1':'0');
+  if(dm)localStorage.setItem('jayan_os_density_mode',dm.value);
+  applyAdvancedSettings();__saveSettings();
+}
+
+function openBackup(){
+  document.getElementById('sheetTitle').textContent='Backup & Restore';
+  document.getElementById('sheetContent').innerHTML=`
+    <p>Exporta la configuración de Jayan OS y sus datos locales compatibles a un archivo JSON.</p>
+    <div class="backup-actions">
+      <button onclick="exportJayanOS()">Exportar</button>
+      <button onclick="document.getElementById('importFile').click()">Importar</button>
+    </div>
+    <input id="importFile" type="file" accept="application/json" style="display:none" onchange="importJayanOS(this.files[0])">
+    <p><small>La importación no borra claves desconocidas fuera del backup.</small></p>`;
+  sheet.classList.add('show');
+}
+function exportJayanOS(){
+  const data={version:'0.6',createdAt:new Date().toISOString(),localStorage:{}};
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k)data.localStorage[k]=localStorage.getItem(k)}
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='jayan-os-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function importJayanOS(file){
+  if(!file)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const data=JSON.parse(r.result);
+      if(!data.localStorage)throw new Error('Formato inválido');
+      if(!confirm('¿Importar este backup de Jayan OS?'))return;
+      Object.entries(data.localStorage).forEach(([k,v])=>localStorage.setItem(k,v));
+      alert('Backup importado. Jayan OS se recargará.');location.reload();
+    }catch(e){alert('No se pudo importar: '+e.message)}
+  };
+  r.readAsText(file);
+}
+
+let focusSeconds=1500,focusTimerHandle=null,focusRunning=false;
+function openFocus(min=25){
+  focusSeconds=min*60;focusRunning=false;clearInterval(focusTimerHandle);renderFocus();
+  document.getElementById('focusOverlay').classList.add('show');
+}
+function startFocusFromSettings(){closeSheet();openFocus(25)}
+function renderFocus(){
+  const m=String(Math.floor(focusSeconds/60)).padStart(2,'0'),s=String(focusSeconds%60).padStart(2,'0');
+  document.getElementById('focusTimer').textContent=m+':'+s;
+}
+function toggleFocusTimer(){
+  focusRunning=!focusRunning;
+  clearInterval(focusTimerHandle);
+  if(focusRunning){
+    focusTimerHandle=setInterval(()=>{
+      focusSeconds=Math.max(0,focusSeconds-1);renderFocus();
+      if(focusSeconds===0){clearInterval(focusTimerHandle);focusRunning=false;showToast('Focus completado')}
+    },1000)
+  }
+}
+function closeFocus(){clearInterval(focusTimerHandle);focusRunning=false;document.getElementById('focusOverlay').classList.remove('show')}
+
+const __applyWidgetTitles=applyWidgetTitles;
+applyWidgetTitles=function(){
+  __applyWidgetTitles();
+  const el=document.getElementById('widgetTitleSystem');
+  if(el)el.textContent=localStorage.getItem('jayan_os_widget_title_system')||'SYSTEM';
+}
+applyWidgetTitles();
+
+function installPromptSupport(){
+  let deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt',e=>{
+    e.preventDefault();deferredPrompt=e;
+    showToast('Jayan OS se puede instalar como app');
+  });
+}
+installPromptSupport();
+
+
+// ---------- JAYAN OS V0.7 VISUAL ENGINE ----------
+function getVisualState(){
+  return {
+    theme:localStorage.getItem('jayan_os_theme')||'obsidian',
+    iconShape:localStorage.getItem('jayan_os_icon_shape')||'soft',
+    panelAlpha:parseInt(localStorage.getItem('jayan_os_panel_alpha')||'78',10),
+    dockAlpha:parseInt(localStorage.getItem('jayan_os_dock_alpha')||'79',10),
+    wallDim:parseInt(localStorage.getItem('jayan_os_wall_dim')||'44',10),
+    wallBlur:parseInt(localStorage.getItem('jayan_os_wall_blur')||'0',10),
+    wallScale:parseInt(localStorage.getItem('jayan_os_wall_scale')||'100',10),
+    labelsHidden:localStorage.getItem('jayan_os_labels_hidden')==='1',
+    dockHidden:localStorage.getItem('jayan_os_dock_hidden')==='1',
+    clockHidden:localStorage.getItem('jayan_os_clock_hidden')==='1',
+    minimalHome:localStorage.getItem('jayan_os_minimal_home')==='1',
+    glassStrong:localStorage.getItem('jayan_os_glass_strong')==='1',
+    shadowOff:localStorage.getItem('jayan_os_shadow_off')==='1',
+    statusHidden:localStorage.getItem('jayan_os_status_hidden')==='1'
+  }
+}
+function applyVisualState(){
+  const s=getVisualState();
+  [...document.body.classList].filter(c=>c.startsWith('theme-')||c.startsWith('icon-')).forEach(c=>document.body.classList.remove(c));
+  document.body.classList.add('theme-'+s.theme,'icon-'+s.iconShape);
+  document.body.classList.toggle('labels-hidden',s.labelsHidden);
+  document.body.classList.toggle('dock-hidden',s.dockHidden);
+  document.body.classList.toggle('clock-hidden',s.clockHidden);
+  document.body.classList.toggle('minimal-home',s.minimalHome);
+  document.body.classList.toggle('glass-strong',s.glassStrong);
+  document.body.classList.toggle('shadow-off',s.shadowOff);
+  document.body.classList.toggle('status-hidden',s.statusHidden);
+  document.body.classList.toggle('wall-blur',s.wallBlur>0);
+  document.documentElement.style.setProperty('--panel-alpha',(s.panelAlpha/100).toFixed(2));
+  document.documentElement.style.setProperty('--dock-alpha',(s.dockAlpha/100).toFixed(2));
+  document.documentElement.style.setProperty('--wall-dim',(s.wallDim/100).toFixed(2));
+  document.documentElement.style.setProperty('--wall-blur',s.wallBlur+'px');
+  document.documentElement.style.setProperty('--wall-scale',(s.wallScale/100).toFixed(2));
+  restoreCustomWallpaper();
+}
+applyVisualState();
+
+function populateVisualControls(){
+  const s=getVisualState();
+  const set=(id,v,prop='value')=>{const el=document.getElementById(id);if(el)el[prop]=v};
+  set('themeMode',s.theme);set('iconShape',s.iconShape);set('panelAlpha',s.panelAlpha);set('dockAlpha',s.dockAlpha);
+  set('wallDim',s.wallDim);set('wallBlur',s.wallBlur);set('wallScale',s.wallScale);
+  set('labelsHidden',s.labelsHidden,'checked');set('dockHidden',s.dockHidden,'checked');set('clockHidden',s.clockHidden,'checked');
+  set('minimalHome',s.minimalHome,'checked');set('glassStrong',s.glassStrong,'checked');set('shadowOff',s.shadowOff,'checked');set('statusHidden',s.statusHidden,'checked');
+}
+
+const ___openSettings=openSettings;
+openSettings=function(){___openSettings();populateVisualControls()}
+
+const ___saveSettings=saveSettings;
+saveSettings=function(){
+  const val=id=>document.getElementById(id);
+  if(val('themeMode'))localStorage.setItem('jayan_os_theme',val('themeMode').value);
+  if(val('iconShape'))localStorage.setItem('jayan_os_icon_shape',val('iconShape').value);
+  if(val('panelAlpha'))localStorage.setItem('jayan_os_panel_alpha',val('panelAlpha').value);
+  if(val('dockAlpha'))localStorage.setItem('jayan_os_dock_alpha',val('dockAlpha').value);
+  if(val('wallDim'))localStorage.setItem('jayan_os_wall_dim',val('wallDim').value);
+  if(val('wallBlur'))localStorage.setItem('jayan_os_wall_blur',val('wallBlur').value);
+  if(val('wallScale'))localStorage.setItem('jayan_os_wall_scale',val('wallScale').value);
+  const ck=['labelsHidden','dockHidden','clockHidden','minimalHome','glassStrong','shadowOff','statusHidden'];
+  const keys=['jayan_os_labels_hidden','jayan_os_dock_hidden','jayan_os_clock_hidden','jayan_os_minimal_home','jayan_os_glass_strong','jayan_os_shadow_off','jayan_os_status_hidden'];
+  ck.forEach((id,i)=>{if(val(id))localStorage.setItem(keys[i],val(id).checked?'1':'0')});
+  applyVisualState();___saveSettings();
+}
+
+function chooseWallpaper(mode){
+  localStorage.setItem('jayan_os_wallpaper',mode);
+  localStorage.removeItem('jayan_os_custom_wallpaper');
+  setWallpaper(mode);showToast('Fondo aplicado');
+}
+function loadCustomWallpaper(file){
+  if(!file)return;
+  if(file.size>5*1024*1024){alert('Usa una imagen menor de 5 MB para mantener Jayan OS rápido.');return;}
+  const r=new FileReader();
+  r.onload=()=>{
+    localStorage.setItem('jayan_os_custom_wallpaper',r.result);
+    localStorage.setItem('jayan_os_wallpaper','custom');
+    restoreCustomWallpaper();showToast('Fondo personalizado aplicado');
+  };
+  r.readAsDataURL(file);
+}
+function restoreCustomWallpaper(){
+  const mode=localStorage.getItem('jayan_os_wallpaper')||'hero';
+  if(mode==='custom'){
+    const data=localStorage.getItem('jayan_os_custom_wallpaper');
+    if(data)document.documentElement.style.setProperty('--wallpaper',`url("${data}")`);
+  } else setWallpaper(mode);
+}
+function resetAppearance(){
+  ['jayan_os_theme','jayan_os_icon_shape','jayan_os_panel_alpha','jayan_os_dock_alpha','jayan_os_wall_dim','jayan_os_wall_blur','jayan_os_wall_scale',
+   'jayan_os_labels_hidden','jayan_os_dock_hidden','jayan_os_clock_hidden','jayan_os_minimal_home','jayan_os_glass_strong','jayan_os_shadow_off','jayan_os_status_hidden',
+   'jayan_os_custom_wallpaper','jayan_os_wallpaper'].forEach(k=>localStorage.removeItem(k));
+  applyVisualState();openSettings();showToast('Apariencia restablecida');
+}
+function quickMinimal(el){el.classList.toggle('on');localStorage.setItem('jayan_os_minimal_home',el.classList.contains('on')?'1':'0');applyVisualState()}
+function quickLabels(el){el.classList.toggle('on');localStorage.setItem('jayan_os_labels_hidden',el.classList.contains('on')?'0':'1');applyVisualState()}
+function quickDock(el){el.classList.toggle('on');localStorage.setItem('jayan_os_dock_hidden',el.classList.contains('on')?'0':'1');applyVisualState()}
+function quickClock(el){el.classList.toggle('on');localStorage.setItem('jayan_os_clock_hidden',el.classList.contains('on')?'0':'1');applyVisualState()}
+
+function updateBigClock(){
+  const d=new Date(),t=document.getElementById('homeBigClock'),dt=document.getElementById('homeBigDate');
+  if(t)t.textContent=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  if(dt)dt.textContent=d.toLocaleDateString('es-US',{weekday:'long',month:'long',day:'numeric'});
+}
+updateBigClock();setInterval(updateBigClock,1000);
+
+
+function applySeparateWalls(){
+  const home=localStorage.getItem('jayan_os_home_wallpaper');
+  const lock=localStorage.getItem('jayan_os_lock_wallpaper');
+  document.documentElement.style.setProperty('--home-wallpaper',home?`url("${home}")`:"url('hero-v54.jpg')");
+  document.documentElement.style.setProperty('--lock-wallpaper',lock?`url("${lock}")`:"url('a_dark_dramatic_app_dashboard_ui_screenshot_with.png')");
+}
+function loadSeparateWallpaper(file,target){
+  if(!file)return;
+  if(file.size>5*1024*1024){alert('Usa una imagen menor de 5 MB.');return;}
+  const r=new FileReader();
+  r.onload=()=>{
+    localStorage.setItem(target==='home'?'jayan_os_home_wallpaper':'jayan_os_lock_wallpaper',r.result);
+    applySeparateWalls();
+    showToast(target==='home'?'Fondo Home aplicado':'Fondo Lock Screen aplicado');
+  };
+  r.readAsDataURL(file);
+}
+function applyDefaultSeparateWalls(){
+  localStorage.removeItem('jayan_os_home_wallpaper');
+  localStorage.removeItem('jayan_os_lock_wallpaper');
+  applySeparateWalls();showToast('Fondos aplicados');
+}
+applySeparateWalls();
+
+
+// ---------- JAYAN OS V0.8 FLAGSHIP MOTION ----------
+let qsDragStartY=null,qsCurrentY=0,qsDragging=false;
+const qp=document.getElementById('quickpanel');
+
+document.addEventListener('touchstart',e=>{
+  if(!e.touches?.length)return;
+  const y=e.touches[0].clientY;
+  if(y<110 || qp.classList.contains('show')){
+    qsDragStartY=y;qsDragging=true;qp.classList.add('dragging');
+  }
+},{passive:true});
+
+document.addEventListener('touchmove',e=>{
+  if(!qsDragging||qsDragStartY===null||!e.touches?.length)return;
+  const y=e.touches[0].clientY;
+  const dy=y-qsDragStartY;
+  if(!qp.classList.contains('show')){
+    const clamped=Math.max(0,Math.min(360,dy));
+    qp.style.transform=`translateY(calc(-100% - 30px + ${clamped}px)) scale(${0.98+clamped/18000})`;
+    qp.style.opacity=String(Math.min(1,.3+clamped/420));
+  } else {
+    const up=Math.max(-320,Math.min(0,dy));
+    qp.style.transform=`translateY(${up}px) scale(${1+up/18000})`;
+    qp.style.opacity=String(Math.max(.35,1+up/500));
+  }
+},{passive:true});
+
+document.addEventListener('touchend',e=>{
+  if(!qsDragging)return;
+  const endY=e.changedTouches?.[0]?.clientY ?? qsDragStartY;
+  const dy=endY-qsDragStartY;
+  qp.classList.remove('dragging');
+  qp.style.transform='';qp.style.opacity='';
+  if(!qp.classList.contains('show') && dy>110) toggleQuick(true);
+  else if(qp.classList.contains('show') && dy<-90) toggleQuick(false);
+  qsDragStartY=null;qsDragging=false;
+},{passive:true});
+
+function updateLockTelemetry(){
+  const b=document.getElementById('lockBattery'),n=document.getElementById('lockNet');
+  if(b){
+    const native=JayanBridge?.battery?.();
+    if(native)b.textContent='BAT '+native;
+    else if(navigator.getBattery){
+      navigator.getBattery().then(x=>b.textContent='BAT '+Math.round(x.level*100)+'%').catch(()=>b.textContent='BAT --');
+    }
+  }
+  if(n)n.textContent=navigator.onLine?'NET ONLINE':'NET OFFLINE';
+}
+updateLockTelemetry();setInterval(updateLockTelemetry,30000);
+window.addEventListener('online',updateLockTelemetry);window.addEventListener('offline',updateLockTelemetry);
+
+function toggleBatterySaver(el){
+  el.classList.toggle('on');
+  const on=el.classList.contains('on');
+  document.body.classList.toggle('reduce-motion',on);
+  showToast(on?'Battery mode activado':'Battery mode desactivado');
+}
+function togglePrivacyMode(el){
+  el.classList.toggle('on');
+  const on=el.classList.contains('on');
+  localStorage.setItem('jayan_os_privacy_mode',on?'1':'0');
+  showToast(on?'Privacy mode activado':'Privacy mode desactivado');
+}
+function toggleZen(el){
+  el.classList.toggle('on');
+  if(el.classList.contains('on')) openFocus(25);
+}
+
+function getMotionPrefs(){
+  return{
+    fluid:(localStorage.getItem('jayan_os_fluid_panel')??'1')==='1',
+    lockFX:(localStorage.getItem('jayan_os_lock_fx')??'1')==='1',
+    glow:(localStorage.getItem('jayan_os_cyber_glow')??'1')==='1'
+  }
+}
+function applyMotionPrefs(){
+  const p=getMotionPrefs();
+  document.body.classList.toggle('reduce-motion',!p.fluid);
+  document.body.classList.toggle('lockfx-off',!p.lockFX);
+  document.body.classList.toggle('shadow-off',!p.glow);
+}
+applyMotionPrefs();
+
+const ____openSettings=openSettings;
+openSettings=function(){
+  ____openSettings();
+  const p=getMotionPrefs();
+  const a=document.getElementById('fluidPanel'),b=document.getElementById('lockFX'),c=document.getElementById('cyberGlow');
+  if(a)a.checked=p.fluid;if(b)b.checked=p.lockFX;if(c)c.checked=p.glow;
+}
+const ____saveSettings=saveSettings;
+saveSettings=function(){
+  const a=document.getElementById('fluidPanel'),b=document.getElementById('lockFX'),c=document.getElementById('cyberGlow');
+  if(a)localStorage.setItem('jayan_os_fluid_panel',a.checked?'1':'0');
+  if(b)localStorage.setItem('jayan_os_lock_fx',b.checked?'1':'0');
+  if(c)localStorage.setItem('jayan_os_cyber_glow',c.checked?'1':'0');
+  applyMotionPrefs();____saveSettings();
+}
+
+
+function ensureDedicatedLockWallpaper(){
+  const custom=localStorage.getItem('jayan_os_lock_wallpaper');
+  document.documentElement.style.setProperty(
+    '--lock-wallpaper',
+    custom ? `url("${custom}")` : "url('a_dark_dramatic_app_dashboard_ui_screenshot_with.png')"
+  );
+}
+ensureDedicatedLockWallpaper();
+
+
+// JAYAN OS V0.9 — launcher behavior
+function getRecentApps(){try{return JSON.parse(localStorage.getItem('jayan_os_recents')||'[]')}catch{return []}}
+function rememberRecent(name){
+  let r=getRecentApps().filter(x=>x!==name);r.unshift(name);r=r.slice(0,8);
+  localStorage.setItem('jayan_os_recents',JSON.stringify(r));
+}
+const _____appClick=appClick;
+appClick=function(name){rememberRecent(name);flashEdge();_____appClick(name)}
+function openRecents(){
+  const labels=getAppLabels(),r=getRecentApps();
+  document.getElementById('recentList').innerHTML=r.length?r.map(k=>`<div class="recent-card" onclick="closeRecents();appClick('${k}')"><b>${labels[k]||APP_DEFAULTS[k]||k}</b><small>Reciente · toca para abrir</small></div>`).join(''):'<div class="recent-card"><b>Sin apps recientes</b><small>Las apps que abras aparecerán aquí.</small></div>';
+  document.getElementById('recents').classList.add('show');
+}
+function closeRecents(){document.getElementById('recents').classList.remove('show')}
+function flashEdge(){const e=document.getElementById('edgeGlow');e.classList.remove('flash');void e.offsetWidth;e.classList.add('flash')}
+function lockShortcut(kind){
+  if(kind==='camera'){
+    const apps=JayanBridge.getApps();
+    const cam=apps.find(a=>/camera|cámara/i.test(a.label));
+    if(cam)JayanBridge.openApp(cam.packageName); else showToast('Cámara disponible en Android launcher');
+  }else{
+    showToast('Flash requiere integración Android nativa');
+  }
+}
+let navStartY=0;
+document.addEventListener('touchstart',e=>{if(e.touches?.length)navStartY=e.touches[0].clientY},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(!e.changedTouches?.length)return;
+  const y=e.changedTouches[0].clientY,dy=y-navStartY;
+  if(navStartY>window.innerHeight-45 && dy<-85 && !document.getElementById('lock')?.classList.contains('show')){
+    openRecents();
+  }
+},{passive:true});
+
+
+function openNativeCenter(){
+  const on=JayanBridge.available();
+  document.getElementById('nativeCenter').classList.add('show');
+  document.getElementById('nativeDot').classList.toggle('on',on);
+  document.getElementById('nativeState').textContent=on?'Connected · Android native mode':'Web mode · compile/install Android wrapper to activate';
+  let info='Platform: '+navigator.platform+'<br>Online: '+(navigator.onLine?'Yes':'No');
+  if(on){try{info+='<br>'+AndroidBridge.getDeviceInfo()}catch{}}
+  document.getElementById('deviceInfo').innerHTML=info;
+}
+function closeNativeCenter(){document.getElementById('nativeCenter').classList.remove('show')}
+function nativeAction(action){
+  if(!JayanBridge.available()){showToast('Disponible en el APK Android');return}
+  try{AndroidBridge.systemAction(action)}catch{showToast('Acción nativa no disponible')}
+}
+commandCatalog.push({name:'Android Core',hint:'native',run:()=>openNativeCenter()});
+
+
+// JAYAN OS 1.1 — native notification layer
+function nativeNotifications(){
+  if(!JayanBridge.available())return [];
+  try{return JSON.parse(AndroidBridge.getNotifications())}catch{return []}
+}
+function renderNotifications(){
+  const list=nativeNotifications();
+  const box=document.getElementById('notificationList');
+  if(box)box.innerHTML=list.length?list.map(n=>`<div class="notif-item"><div class="ni">◈</div><div class="nb"><b>${escapeHTML(n.app||'Android')}</b><div>${escapeHTML(n.title||'')}</div><small>${escapeHTML(n.text||'')}</small></div></div>`).join(''):'<div class="notif-item"><div class="ni">✓</div><div class="nb"><b>Jayan OS</b><div>Todo limpio</div><small>No hay notificaciones nativas disponibles.</small></div></div>';
+  const lock=document.getElementById('lockNotifications');
+  if(lock)lock.innerHTML=list.slice(0,2).map(n=>`<div class="lock-mini"><b>${escapeHTML(n.app||'Android')}</b> · ${escapeHTML(n.title||n.text||'Notificación')}</div>`).join('');
+}
+function escapeHTML(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function openNotificationCenter(){renderNotifications();document.getElementById('notificationCenter').classList.add('show')}
+function closeNotificationCenter(){document.getElementById('notificationCenter').classList.remove('show')}
+setInterval(renderNotifications,15000);renderNotifications();
+commandCatalog.push({name:'Notificaciones Android',hint:'native',run:()=>openNotificationCenter()});
+
+
+// JAYAN OS 1.2 — installed apps + badges
+function notificationCounts(){
+  const counts={};
+  nativeNotifications().forEach(n=>counts[n.package]=(counts[n.package]||0)+1);
+  return counts;
+}
+function renderAllNativeApps(q=''){
+  const box=document.getElementById('allNativeApps');if(!box)return;
+  const apps=JayanBridge.getApps().filter(a=>!q||a.label.toLowerCase().includes(q.toLowerCase()));
+  const counts=notificationCounts();
+  box.innerHTML=apps.slice(0,100).map(a=>{
+    const c=counts[a.packageName]||0;
+    const icon=a.icon?`<img src="${a.icon}" alt="">`:'◇';
+    return `<div class="native-app" onclick="JayanBridge.openApp('${a.packageName.replace(/'/g,"")}')"><div class="ico-wrap"><div class="ico">${icon}</div>${c?`<span class="badge">${c>99?'99+':c}</span>`:''}</div>${escapeHTML(a.label)}</div>`;
+  }).join('');
+}
+function openNotifPermission(){
+  if(JayanBridge.available()){try{AndroidBridge.openNotificationAccessSettings()}catch{}}
+  else showToast('Disponible en Android APK');
+}
+const ______openNativeCenter=openNativeCenter;
+openNativeCenter=function(){______openNativeCenter();renderAllNativeApps()}
+setInterval(()=>{if(document.getElementById('nativeCenter')?.classList.contains('show'))renderAllNativeApps(document.getElementById('nativeAppSearch')?.value||'')},15000);
+
+
+// JAYAN OS 1.3 Device Control
+function openControlHub(){document.getElementById('controlHub').classList.add('show')}
+function closeControlHub(){document.getElementById('controlHub').classList.remove('show')}
+function nativeControl(a){
+ if(!JayanBridge.available()){showToast('Disponible en el APK Android');return}
+ try{AndroidBridge.systemAction(a)}catch{showToast('Acción Android no disponible')}
+}
+function setNativeBrightness(v){
+ if(!JayanBridge.available()){showToast('Brightness nativo disponible en APK');return}
+ try{AndroidBridge.setBrightness(parseInt(v,10))}catch{showToast('No se pudo cambiar brillo')}
+}
+commandCatalog.push({name:'Device Control',hint:'native',run:()=>openControlHub()});
+
+
+// JAYAN OS 1.4 — Smart OS
+function haptic(ms=12){if(localStorage.getItem('jayan_os_haptic')!=='0'&&navigator.vibrate)navigator.vibrate(ms)}
+document.addEventListener('click',e=>{if(e.target.closest('button,.app,.qtile'))haptic(9)},true);
+
+function openProfiles(){document.getElementById('profileCenter').classList.add('show')}
+function closeProfiles(){document.getElementById('profileCenter').classList.remove('show')}
+function setProfile(p){
+ ['normal','work','gym','night','minimal'].forEach(x=>document.body.classList.remove('profile-'+x));
+ if(p!=='normal')document.body.classList.add('profile-'+p);
+ localStorage.setItem('jayan_os_profile',p);
+ document.getElementById('profileChip').textContent=p.toUpperCase();
+ closeProfiles();haptic(18);showToast('Perfil '+p);
+}
+setProfile(localStorage.getItem('jayan_os_profile')||'normal');
+
+function togglePerformance(force){
+ const next=typeof force==='boolean'?force:!document.body.classList.contains('performance-mode');
+ document.body.classList.toggle('performance-mode',next);
+ localStorage.setItem('jayan_os_performance',next?'1':'0');
+ showToast(next?'Performance Mode ON':'Performance Mode OFF');
+}
+if(localStorage.getItem('jayan_os_performance')==='1')document.body.classList.add('performance-mode');
+
+function openAOD(){updateAOD();document.getElementById('aod').classList.add('show')}
+function closeAOD(){document.getElementById('aod').classList.remove('show')}
+function updateAOD(){
+ const d=new Date();
+ const t=document.getElementById('aodTime'),dt=document.getElementById('aodDate'),b=document.getElementById('aodBat');
+ if(t)t.textContent=d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+ if(dt)dt.textContent=d.toLocaleDateString([],{weekday:'short',month:'short',day:'numeric'});
+ if(b){const x=JayanBridge.battery();b.textContent='BAT '+(x||'--')}
+}
+setInterval(updateAOD,30000);
+
+function autoProfileByTime(){
+ if(localStorage.getItem('jayan_os_auto_profile')!=='1')return;
+ const h=new Date().getHours();
+ if(h>=23||h<6)setProfile('night');
+}
+autoProfileByTime();
+
+async function applyDynamicTheme(){
+ if(localStorage.getItem('jayan_os_dynamic_theme')!=='1')return;
+ // deterministic wallpaper-aware presets without expensive canvas reads/data leakage
+ const mode=localStorage.getItem('jayan_os_wallpaper')||'hero';
+ const colors={hero:['#d6aa45','#fff0ad'],eye:['#9bb6ff','#e7edff'],plain:['#d8d8d8','#ffffff'],custom:['#d6aa45','#fff0ad']};
+ const c=colors[mode]||colors.hero;
+ document.documentElement.style.setProperty('--accent',c[0]);
+ document.documentElement.style.setProperty('--accent2',c[1]);
+}
+applyDynamicTheme();
+
+const _______openSettings=openSettings;
+openSettings=function(){
+ _______openSettings();
+ const d=document.getElementById('dynamicTheme'),h=document.getElementById('hapticFeedback'),p=document.getElementById('performanceMode');
+ if(d)d.checked=localStorage.getItem('jayan_os_dynamic_theme')==='1';
+ if(h)h.checked=localStorage.getItem('jayan_os_haptic')!=='0';
+ if(p)p.checked=document.body.classList.contains('performance-mode');
+}
+const _______saveSettings=saveSettings;
+saveSettings=function(){
+ const d=document.getElementById('dynamicTheme'),h=document.getElementById('hapticFeedback'),p=document.getElementById('performanceMode');
+ if(d)localStorage.setItem('jayan_os_dynamic_theme',d.checked?'1':'0');
+ if(h)localStorage.setItem('jayan_os_haptic',h.checked?'1':'0');
+ if(p)togglePerformance(p.checked);
+ applyDynamicTheme();_______saveSettings();
+}
+
+// extra universal commands
+commandCatalog.push(
+ {name:'Perfil Work',hint:'profile',run:()=>setProfile('work')},
+ {name:'Perfil Gym',hint:'profile',run:()=>setProfile('gym')},
+ {name:'Perfil Night',hint:'profile',run:()=>setProfile('night')},
+ {name:'Always On Display',hint:'oled',run:()=>openAOD()},
+ {name:'Performance Mode',hint:'system',run:()=>togglePerformance()}
+);
+
+// double-tap empty home to lock
+let lastHomeTap=0;
+document.addEventListener('click',e=>{
+ if(e.target.closest('.app,button,input,.widget,.jarvis,.dock,.smart-dock'))return;
+ const now=Date.now();
+ if(now-lastHomeTap<330){lockNow();haptic(22)}
+ lastHomeTap=now;
+});
+
+
+// JAYAN OS 1.5 — local commands + recovery
+function openHealth(){
+ document.getElementById('healthCenter').classList.add('show');
+ document.getElementById('healthCore').textContent='OK · Web core running';
+ document.getElementById('healthNative').innerHTML=JayanBridge.available()?'<span class="health-ok">CONNECTED</span>':'<span class="health-warn">WEB MODE</span>';
+ let kb=0;try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);kb+=(k.length+(localStorage.getItem(k)||'').length)*2/1024}}catch{}
+ document.getElementById('healthStorage').textContent=kb.toFixed(1)+' KB local configuration';
+}
+function closeHealth(){document.getElementById('healthCenter').classList.remove('show')}
+function toggleSafeBoot(){
+ const on=!document.body.classList.contains('safe-boot');
+ document.body.classList.toggle('safe-boot',on);localStorage.setItem('jayan_os_safe_boot',on?'1':'0');
+ showToast(on?'Safe Boot ON':'Safe Boot OFF');
+}
+if(localStorage.getItem('jayan_os_safe_boot')==='1')document.body.classList.add('safe-boot');
+
+function makeRecoverySnapshot(){
+ const snap={created:new Date().toISOString(),data:{}};
+ for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k!=='jayan_os_recovery_snapshot')snap.data[k]=localStorage.getItem(k)}
+ try{localStorage.setItem('jayan_os_recovery_snapshot',JSON.stringify(snap));showToast('Recovery snapshot creado')}catch{alert('No hay espacio para crear snapshot')}
+}
+function restoreRecoverySnapshot(){
+ try{
+  const snap=JSON.parse(localStorage.getItem('jayan_os_recovery_snapshot')||'null');
+  if(!snap?.data){showToast('No hay snapshot');return}
+  if(!confirm('¿Restaurar el snapshot de Jayan OS?'))return;
+  Object.entries(snap.data).forEach(([k,v])=>localStorage.setItem(k,v));
+  location.reload();
+ }catch{showToast('Snapshot inválido')}
+}
+
+function executeLocalCommand(raw){
+ const q=String(raw||'').toLowerCase().trim();
+ if(!q)return;
+ if(/(abre|open).*(settings|ajustes)/.test(q)){openSettings();return}
+ if(/(abre|open).*(apps|aplicaciones)/.test(q)){openDrawer();return}
+ if(/(abre|open).*(notificaciones|notifications)/.test(q)){openNotificationCenter();return}
+ if(/(abre|open).*(control)/.test(q)){openControlHub();return}
+ if(/(bloquea|lock)/.test(q)){lockNow();return}
+ if(/(focus|concentr)/.test(q)){const m=parseInt(q.match(/\d+/)?.[0]||'25',10);openFocus(Math.min(120,Math.max(1,m)));return}
+ if(/(perfil|profile).*(gym)/.test(q)){setProfile('gym');return}
+ if(/(perfil|profile).*(work|trabajo)/.test(q)){setProfile('work');return}
+ if(/(perfil|profile).*(night|noche)/.test(q)){setProfile('night');return}
+ if(/(aod|always on)/.test(q)){openAOD();return}
+ const app=JayanBridge.getApps().find(a=>q.includes(a.label.toLowerCase()));
+ if(app){JayanBridge.openApp(app.packageName);return}
+ showToast('Comando no reconocido');
+}
+
+function startLocalVoice(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){showToast('Voice Recognition no disponible en este WebView');return}
+ const orb=document.getElementById('voiceOrb'),r=new SR();
+ r.lang='es-US';r.interimResults=false;r.maxAlternatives=1;
+ r.onstart=()=>orb.classList.add('listening');
+ r.onend=()=>orb.classList.remove('listening');
+ r.onerror=()=>{orb.classList.remove('listening');showToast('No pude escuchar')};
+ r.onresult=e=>{const t=e.results[0][0].transcript;showToast(t);executeLocalCommand(t)};
+ r.start();
+}
+commandCatalog.push(
+ {name:'System Health',hint:'system',run:()=>openHealth()},
+ {name:'Crear Recovery Snapshot',hint:'recovery',run:()=>makeRecoverySnapshot()},
+ {name:'Safe Boot',hint:'recovery',run:()=>toggleSafeBoot()}
+);
+
+// crash marker: useful on next launch
+window.addEventListener('error',e=>{
+ try{localStorage.setItem('jayan_os_last_error',JSON.stringify({time:new Date().toISOString(),message:String(e.message||'Unknown error').slice(0,300)}))}catch{}
+});
+
+
+// JAYAN OS 1.6 Release Candidate
+window.addEventListener('load',()=>setTimeout(()=>document.getElementById('bootLogo')?.classList.add('hide'),650));
+function openReleaseCenter(){document.getElementById('releaseCenter').classList.add('show');runPreflight()}
+function closeReleaseCenter(){document.getElementById('releaseCenter').classList.remove('show')}
+function runPreflight(){
+ const tests=[
+  ['Storage',(()=>{try{localStorage.setItem('__jayan_test','1');localStorage.removeItem('__jayan_test');return true}catch{return false}})()],
+  ['Service Worker','serviceWorker' in navigator],
+  ['Native Bridge',JayanBridge.available()],
+  ['Online',navigator.onLine],
+  ['Recovery',typeof makeRecoverySnapshot==='function'],
+  ['Launcher Pages',!!document.getElementById('launcherPages')]
+ ];
+ const ok=tests.filter(x=>x[1]).length;
+ document.getElementById('preflightResult').innerHTML=tests.map(x=>`${x[1]?'✓':'○'} ${x[0]}`).join('<br>')+`<br><b>${ok}/${tests.length} ready</b>`;
+}
+commandCatalog.push({name:'Release Center',hint:'system',run:()=>openReleaseCenter()});
+
+
+// JAYAN OS 1.7 — daily-driver layer
+function openLauncherSearch(){
+ const p=document.getElementById('launcherSearch');p.classList.add('show');
+ setTimeout(()=>document.getElementById('launcherSearchInput')?.focus(),80);
+ runUniversalSearch('');
+}
+function closeLauncherSearch(){document.getElementById('launcherSearch').classList.remove('show')}
+function runUniversalSearch(q){
+ q=String(q||'').trim().toLowerCase();
+ const apps=JayanBridge.getApps().filter(a=>!q||a.label.toLowerCase().includes(q)).slice(0,12);
+ const cmds=commandCatalog.filter(c=>!q||c.name.toLowerCase().includes(q)||String(c.hint||'').toLowerCase().includes(q)).slice(0,8);
+ let out='';
+ if(apps.length){out+='<div class="search-section"><h3>APPS</h3>'+apps.map(a=>`<div class="search-hit" onclick="JayanBridge.openApp('${a.packageName.replace(/'/g,"")}');closeLauncherSearch()"><div class="sicon">◇</div><div>${escapeHTML(a.label)}</div></div>`).join('')+'</div>'}
+ if(cmds.length){out+='<div class="search-section"><h3>COMMANDS</h3>'+cmds.map((c,i)=>`<div class="search-hit" data-cmd="${commandCatalog.indexOf(c)}" onclick="commandCatalog[this.dataset.cmd].run();closeLauncherSearch()"><div class="sicon">⌘</div><div>${escapeHTML(c.name)}</div></div>`).join('')+'</div>'}
+ document.getElementById('launcherSearchResults').innerHTML=out||'<div class="search-section"><h3>NO RESULTS</h3></div>';
+}
+function updateDailyWidgets(){
+ const b=document.getElementById('widgetBattery'),n=document.getElementById('widgetNotifs'),p=document.getElementById('widgetProfile');
+ if(b)b.textContent=JayanBridge.battery()||'--';
+ if(n)n.textContent=String(nativeNotifications().length);
+ if(p)p.textContent=(localStorage.getItem('jayan_os_profile')||'normal').toUpperCase();
+}
+setInterval(updateDailyWidgets,15000);updateDailyWidgets();
+
+// Swipe up anywhere on an unobstructed home region opens universal search/app discovery.
+let v17StartY=0,v17StartX=0;
+document.addEventListener('touchstart',e=>{if(e.touches?.length){v17StartY=e.touches[0].clientY;v17StartX=e.touches[0].clientX}},{passive:true});
+document.addEventListener('touchend',e=>{
+ if(!e.changedTouches?.length)return;
+ if(e.target.closest('button,input,.overlay,.drawer,.quickpanel,.recents,.native-center,.notif-center,.control-hub,.profile-center,.release-center,.health-center'))return;
+ const dy=e.changedTouches[0].clientY-v17StartY,dx=e.changedTouches[0].clientX-v17StartX;
+ if(dy<-115&&Math.abs(dy)>Math.abs(dx)*1.35)openLauncherSearch();
+},{passive:true});
+
+// Privacy indicator while voice recognition is active.
+const ________startLocalVoice=startLocalVoice;
+startLocalVoice=function(){
+ document.getElementById('privacyDot')?.classList.add('on');
+ setTimeout(()=>document.getElementById('privacyDot')?.classList.remove('on'),12000);
+ return ________startLocalVoice();
+}
+commandCatalog.push({name:'Universal Search',hint:'search',run:()=>openLauncherSearch()});
+
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+</body></html>
+<style>
+.bg{background:linear-gradient(rgba(0,0,0,.20),rgba(0,0,0,.62)),var(--home-wallpaper) center/cover no-repeat!important}
+.lock{background:linear-gradient(rgba(0,0,0,.12),rgba(0,0,0,.58)),var(--lock-wallpaper) center/cover no-repeat!important}
+
+/* ===== JAYAN OS V0.8 FLAGSHIP UI ===== */
+:root{
+  --ease-samsung:cubic-bezier(.2,.8,.2,1);
+  --panel-radius:28px;
+  --cyber-glow:0 0 22px color-mix(in srgb,var(--accent) 30%,transparent);
+}
+body{overscroll-behavior:none}
+.quickpanel{
+  top:calc(env(safe-area-inset-top) + 6px);
+  left:8px;right:8px;
+  border-radius:30px;
+  background:linear-gradient(180deg,rgba(14,14,16,.96),rgba(5,5,7,.94));
+  border:1px solid color-mix(in srgb,var(--accent) 35%,#2b2b2b);
+  box-shadow:0 30px 100px #000c,inset 0 1px 0 #ffffff08;
+  transform:translateY(calc(-100% - 30px)) scale(.98);
+  opacity:.3;
+  transition:transform .42s var(--ease-samsung),opacity .32s ease;
+  will-change:transform,opacity;
+}
+.quickpanel.show{transform:translateY(0) scale(1);opacity:1}
+.quickpanel.dragging{transition:none}
+.quickpanel::before{
+  content:"";position:absolute;left:50%;top:8px;transform:translateX(-50%);
+  width:46px;height:4px;border-radius:999px;background:#ffffff22
+}
+.qhead{padding-top:8px}
+.qtime{
+  font-family:"Orbitron","Segoe UI",system-ui,sans-serif;
+  font-variant-numeric:tabular-nums;
+  font-size:34px;letter-spacing:.06em;
+  color:var(--accent2);
+  text-shadow:var(--cyber-glow)
+}
+.qgrid{grid-template-columns:repeat(4,1fr);gap:12px}
+.qtile{
+  min-height:78px;border-radius:22px;
+  background:linear-gradient(160deg,#15161a,#09090b);
+  border:1px solid #ffffff0d;
+  box-shadow:inset 0 1px 0 #ffffff08,0 8px 24px #0007;
+  transition:transform .18s var(--ease-samsung),background .2s,border-color .2s;
+}
+.qtile:active{transform:scale(.94)}
+.qtile.on{
+  background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 26%,#151515),#0d0d0f);
+  border-color:color-mix(in srgb,var(--accent) 55%,transparent);
+  color:var(--accent2);
+  box-shadow:inset 0 1px 0 #ffffff12,0 0 22px color-mix(in srgb,var(--accent) 18%,transparent)
+}
+.qtile span{font-size:24px}
+.notif-card{
+  border-radius:20px;background:linear-gradient(180deg,#111217,#0b0b0e);
+  border:1px solid #ffffff0c;padding:13px 14px;
+  box-shadow:inset 0 1px 0 #ffffff08,0 10px 26px #0007
+}
+.notif-card .notif-icon{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:#17130b;border:1px solid #6d5629;margin-right:10px}
+.notif-row{display:flex;align-items:center}
+
+.home-clock-large{
+  padding:10px 0 4px;
+  font-family:"Orbitron","Rajdhani","Segoe UI",sans-serif;
+  letter-spacing:.08em
+}
+.home-clock-large .t{
+  font-size:54px;font-weight:600;
+  color:var(--accent2);
+  text-shadow:0 0 12px color-mix(in srgb,var(--accent) 35%,transparent),0 0 30px color-mix(in srgb,var(--accent) 15%,transparent);
+  position:relative;
+}
+.home-clock-large .t::after{
+  content:"";display:block;width:84px;height:2px;margin:8px auto 0;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  box-shadow:0 0 16px var(--accent)
+}
+.home-clock-large .d{
+  text-transform:uppercase;font-size:10px;letter-spacing:.24em;color:#c4b787
+}
+
+.lock{
+  justify-content:space-between;
+  background:
+   radial-gradient(circle at 50% 18%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 34%),
+   linear-gradient(rgba(0,0,0,.10),rgba(0,0,0,.66)),
+   var(--lock-wallpaper) center/cover no-repeat!important;
+  overflow:hidden;
+}
+.lock::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+   linear-gradient(90deg,transparent 49.7%,color-mix(in srgb,var(--accent) 8%,transparent) 50%,transparent 50.3%),
+   linear-gradient(0deg,transparent 49.7%,color-mix(in srgb,var(--accent) 6%,transparent) 50%,transparent 50.3%);
+  background-size:46px 46px;
+  mask-image:linear-gradient(to bottom,#0006,transparent 72%);
+}
+.lock::after{
+  content:"";position:absolute;inset:-20%;
+  background:conic-gradient(from 0deg at 50% 35%,transparent 0 20%,color-mix(in srgb,var(--accent) 8%,transparent) 23%,transparent 27% 100%);
+  animation:lockSweep 14s linear infinite;pointer-events:none
+}
+@keyframes lockSweep{to{transform:rotate(360deg)}}
+.lock>*{position:relative;z-index:2}
+.lock-time{
+  font-family:"Orbitron","Rajdhani","Segoe UI",sans-serif;
+  font-size:76px;font-weight:650;letter-spacing:.08em;
+  color:#f9efc3;text-shadow:0 0 14px color-mix(in srgb,var(--accent) 35%,transparent),0 0 40px #000;
+  text-align:center
+}
+.lock-date{
+  text-transform:uppercase;letter-spacing:.20em;font-size:11px;color:var(--accent2);
+  margin-top:6px
+}
+.lock-brand{
+  background:radial-gradient(circle,#0008,transparent 68%);
+  padding:24px 34px;border-radius:50%
+}
+.lock-brand img{
+  width:108px;height:108px;border:1px solid color-mix(in srgb,var(--accent) 60%,#444);
+  box-shadow:0 0 30px color-mix(in srgb,var(--accent) 28%,transparent),inset 0 0 22px #000
+}
+.lock-brand h2{
+  font-family:"Orbitron","Segoe UI",sans-serif;
+  font-size:16px;letter-spacing:.28em;color:var(--accent2);
+  text-shadow:var(--cyber-glow)
+}
+.lock-status{
+  display:flex;gap:12px;justify-content:center;margin-top:12px;
+  font-size:10px;color:#d7c99b;letter-spacing:.08em
+}
+.lock-status span{
+  padding:6px 9px;border-radius:999px;background:#08080899;border:1px solid #ffffff12;
+  backdrop-filter:blur(10px)
+}
+.unlock{
+  border-radius:22px;padding:15px 18px;
+  background:linear-gradient(180deg,#0d0e12cc,#060608dd);
+  border:1px solid color-mix(in srgb,var(--accent) 42%,#333);
+  box-shadow:0 16px 42px #000a,inset 0 1px 0 #ffffff0b;
+  letter-spacing:.08em
+}
+.unlock::before{content:"⌃ ";color:var(--accent)}
+.lock-hint{font-size:10px;color:#9b8c66;text-align:center;margin-top:8px;letter-spacing:.12em}
+
+.status{
+  backdrop-filter:blur(8px);
+  background:linear-gradient(180deg,#00000033,transparent);
+  border-radius:0 0 16px 16px
+}
+.screen{transition:filter .3s ease,transform .3s var(--ease-samsung)}
+.quickpanel.show ~ .screen{filter:brightness(.68) blur(1px);transform:scale(.992)}
+.dock{
+  border-radius:28px;
+  box-shadow:0 16px 50px #000a,inset 0 1px 0 #ffffff08
+}
+.widget{
+  border-radius:24px;
+  box-shadow:0 14px 40px #0008,inset 0 1px 0 #ffffff07
+}
+.ico{
+  transition:transform .18s var(--ease-samsung),box-shadow .2s,border-color .2s;
+}
+.app:active .ico{transform:scale(.90)}
+.page-track{transition:transform .38s var(--ease-samsung)}
+.drawer{
+  background:linear-gradient(180deg,#060608f6,#000000f8);
+  transition:opacity .25s ease
+}
+.drawer-head input{border-radius:18px}
+.command-palette{
+  border-radius:28px;
+  box-shadow:0 28px 110px #000e
+}
+.cyber-line{
+  position:fixed;z-index:4;left:8%;right:8%;top:calc(env(safe-area-inset-top) + 58px);height:1px;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.28;
+  box-shadow:0 0 12px var(--accent);pointer-events:none
+}
+body.reduce-motion .lock::after{animation:none}
+
+
+/* V0.9 interaction polish */
+.smart-dock{position:fixed;z-index:12;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 10px);display:flex;justify-content:space-around;align-items:center;padding:9px 12px;border-radius:28px;background:#08090bdd;border:1px solid #ffffff10;backdrop-filter:blur(24px);box-shadow:0 16px 55px #000b}
+.smart-dock button{width:52px;height:52px;border-radius:18px;background:#111217;border:1px solid #ffffff0e;color:var(--accent2);font-size:22px;box-shadow:inset 0 1px #ffffff08}
+.smart-dock button:active{transform:scale(.9)}
+body.dock-hidden .smart-dock{display:none}
+.recents{position:fixed;z-index:80;inset:0;background:#020204e8;backdrop-filter:blur(18px);display:none;padding:calc(env(safe-area-inset-top) + 60px) 16px 100px;overflow:auto}
+.recents.show{display:block}.recents h2{color:var(--accent2);letter-spacing:.12em}.recent-card{background:linear-gradient(160deg,#15161a,#08090b);border:1px solid #ffffff10;border-radius:24px;padding:18px;margin:12px 0;min-height:112px;box-shadow:0 18px 50px #0009}.recent-card b{color:#fff1bd}.recent-card small{display:block;color:#8f835f;margin-top:7px}
+.edge-glow{position:fixed;z-index:90;inset:0;pointer-events:none;border:0 solid var(--accent);opacity:0;box-shadow:inset 0 0 45px var(--accent)}
+.edge-glow.flash{animation:edgeFlash .8s ease}
+@keyframes edgeFlash{0%{opacity:0;border-width:0}25%{opacity:.45;border-width:2px}100%{opacity:0;border-width:0}}
+.lock-actions{display:flex;gap:12px;justify-content:center;margin-bottom:8px}.lock-action{width:48px;height:48px;border-radius:50%;background:#08090bbb;border:1px solid #ffffff18;color:var(--accent2);font-size:18px;backdrop-filter:blur(14px)}
+.gesture-pill{position:fixed;z-index:92;bottom:4px;left:50%;transform:translateX(-50%);width:112px;height:5px;border-radius:999px;background:#ffffffb5;box-shadow:0 0 12px #fff3}
+
+
+.native-center{position:fixed;z-index:75;inset:0;background:#030305f2;backdrop-filter:blur(22px);display:none;padding:calc(env(safe-area-inset-top) + 58px) 14px 90px;overflow:auto}
+.native-center.show{display:block}.native-card{background:linear-gradient(160deg,#14151a,#08090b);border:1px solid #ffffff10;border-radius:22px;padding:15px;margin:10px 0}.native-card h3{margin:0 0 8px;color:var(--accent2)}.native-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.native-actions button{background:#121318;border:1px solid #ffffff12;color:#f7e9b7;border-radius:14px;padding:12px}
+.native-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#777;margin-right:7px}.native-dot.on{background:#72e0a8;box-shadow:0 0 12px #72e0a8}
+
+
+/* JAYAN OS 1.1 */
+.notif-center{position:fixed;z-index:84;inset:0;background:#020204ee;backdrop-filter:blur(24px);display:none;padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.notif-center.show{display:block}
+.notif-item{background:linear-gradient(160deg,#15161a,#090a0d);border:1px solid #ffffff10;border-radius:22px;padding:14px;margin:9px 0;display:flex;gap:11px;align-items:flex-start}.notif-item .ni{width:38px;height:38px;border-radius:13px;background:#16120b;border:1px solid #6c5629;display:grid;place-items:center}.notif-item .nb{flex:1}.notif-item b{color:#fff0b8}.notif-item small{color:#8e805c}
+.app-search-native{display:flex;gap:8px;margin:10px 0}.app-search-native input{flex:1;background:#0b0c0f;border:1px solid #ffffff12;border-radius:15px;padding:12px;color:#fff}
+.lock-notifs{width:min(430px,92vw);margin:10px auto}.lock-mini{background:#08090bb8;border:1px solid #ffffff12;border-radius:18px;padding:10px 12px;margin:7px 0;backdrop-filter:blur(14px);font-size:11px;color:#e9ddb7}
+
+
+/* JAYAN OS 1.2 — native launcher polish */
+.app-drawer-native{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px;padding:8px 0 24px}
+.native-app{font-size:11px;text-align:center;color:#e8ddb8;min-width:0}
+.native-app .ico{margin:auto auto 6px;overflow:hidden}
+.native-app .ico img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.badge{position:absolute;right:-4px;top:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#d24b4b;color:white;font-size:10px;display:grid;place-items:center;border:2px solid #08090b}
+.ico-wrap{position:relative;width:max-content;margin:auto}
+.native-search{width:100%;box-sizing:border-box;background:#090a0d;border:1px solid #ffffff12;border-radius:17px;padding:13px;color:white;margin:8px 0 12px}
+.permission-card{border:1px solid #6a5429;background:#0b0b0dcc;border-radius:18px;padding:12px;margin:10px 0}.permission-card button{margin-top:8px}
+
+
+/* JAYAN OS 1.3 — Device Control */
+.control-hub{position:fixed;z-index:86;inset:0;display:none;background:#020204ef;backdrop-filter:blur(25px);padding:calc(env(safe-area-inset-top) + 52px) 14px 90px;overflow:auto}.control-hub.show{display:block}
+.control-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.control-tile{min-height:92px;border-radius:22px;background:linear-gradient(155deg,#17181d,#090a0d);border:1px solid #ffffff10;color:#eee1b8;padding:13px;text-align:left}.control-tile span{display:block;font-size:25px;margin-bottom:8px;color:var(--accent2)}.control-tile:active{transform:scale(.96)}
+.control-wide{grid-column:1/-1}.brightness-wrap{margin-top:10px}.brightness-wrap input{width:100%}
+
+
+/* JAYAN OS 1.4 — Intelligence & UX */
+:root{--dynamic-accent:var(--accent)}
+.profile-chip{position:fixed;z-index:15;right:14px;top:calc(env(safe-area-inset-top) + 42px);padding:6px 10px;border-radius:999px;background:#08090bbb;border:1px solid #ffffff12;color:var(--accent2);font-size:9px;letter-spacing:.12em;backdrop-filter:blur(14px)}
+.profile-center{position:fixed;z-index:87;inset:0;display:none;background:#020204ef;backdrop-filter:blur(24px);padding:calc(env(safe-area-inset-top) + 55px) 14px 90px;overflow:auto}.profile-center.show{display:block}
+.profile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.profile-btn{min-height:100px;border-radius:23px;background:linear-gradient(155deg,#15161a,#08090b);border:1px solid #ffffff10;color:#e9ddb7;font-size:14px}.profile-btn span{display:block;font-size:28px;margin-bottom:8px}
+.aod{position:fixed;z-index:110;inset:0;background:#000;display:none;align-items:center;justify-content:center}.aod.show{display:flex}.aod-core{text-align:center}.aod-time{font-family:"Orbitron","Segoe UI",sans-serif;font-size:64px;letter-spacing:.1em;color:#e7d79d;text-shadow:0 0 18px #d6aa4540}.aod-date{font-size:10px;letter-spacing:.22em;color:#756a4e;text-transform:uppercase}.aod-bat{margin-top:22px;font-size:10px;color:#655c46}
+body.performance-mode *{backdrop-filter:none!important;box-shadow:none!important;text-shadow:none!important}body.performance-mode .lock::after{display:none!important}
+body.profile-night{--panel-alpha:.90;--dock-alpha:.90}.profile-night .bg{filter:brightness(.42) saturate(.7)}
+body.profile-gym{--accent:#efb64c;--accent2:#fff1bd}.profile-work{--accent:#9bb6ff;--accent2:#e6edff}.profile-minimal .widget,.profile-minimal .jarvis{display:none}
+.haptic-ready button:active,.haptic-ready .app:active{transform:scale(.94)}
+
+
+/* JAYAN OS 1.5 — Command & Safety Core */
+.health-center{position:fixed;z-index:89;inset:0;display:none;background:#020204f2;backdrop-filter:blur(25px);padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.health-center.show{display:block}
+.health-card{background:linear-gradient(155deg,#15161a,#08090b);border:1px solid #ffffff10;border-radius:22px;padding:14px;margin:10px 0}.health-card b{color:var(--accent2)}.health-ok{color:#78dda9}.health-warn{color:#e9ba68}
+.voice-orb{position:fixed;z-index:18;right:16px;bottom:calc(env(safe-area-inset-bottom) + 88px);width:52px;height:52px;border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 55%,#333);background:#090a0ddd;color:var(--accent2);box-shadow:0 0 24px color-mix(in srgb,var(--accent) 18%,transparent);font-size:20px}.voice-orb.listening{animation:voicePulse 1s infinite alternate}@keyframes voicePulse{to{box-shadow:0 0 38px color-mix(in srgb,var(--accent) 48%,transparent);transform:scale(1.06)}}
+body.safe-boot .widget,body.safe-boot .jarvis,body.safe-boot .cyber-line{display:none!important}
+
+
+/* JAYAN OS 1.6 — Release Candidate */
+.release-center{position:fixed;z-index:91;inset:0;display:none;background:#020204f2;backdrop-filter:blur(25px);padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.release-center.show{display:block}
+.release-card{background:linear-gradient(155deg,#15161a,#08090b);border:1px solid #ffffff10;border-radius:22px;padding:14px;margin:10px 0}.release-card b{color:var(--accent2)}.release-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.release-grid button{background:#101116;border:1px solid #ffffff12;color:#eee1b8;border-radius:14px;padding:12px}
+.boot-logo{position:fixed;z-index:130;inset:0;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .45s ease}.boot-logo.hide{opacity:0;pointer-events:none}.boot-core{text-align:center}.boot-core img{width:112px;height:112px;border-radius:50%;box-shadow:0 0 45px #d6aa4550}.boot-core h1{font-family:"Orbitron","Segoe UI",sans-serif;letter-spacing:.22em;color:#f3e3ad;font-size:18px}.boot-core small{color:#71674d;letter-spacing:.18em}
+
+
+/* JAYAN OS 1.7 — Daily Driver */
+.launcher-search{position:fixed;z-index:93;inset:0;display:none;background:#020204e8;backdrop-filter:blur(26px);padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.launcher-search.show{display:block}
+.launcher-search input{width:100%;box-sizing:border-box;background:#0b0c10;border:1px solid #ffffff14;border-radius:22px;padding:16px;color:#fff;font-size:16px;outline:none}.search-section{margin-top:18px}.search-section h3{font-size:10px;letter-spacing:.18em;color:#8f815e}.search-hit{display:flex;align-items:center;gap:11px;background:#101116;border:1px solid #ffffff0d;border-radius:18px;padding:12px;margin:7px 0}.search-hit .sicon{width:36px;height:36px;border-radius:12px;background:#18191d;display:grid;place-items:center;color:var(--accent2)}
+.widget-stack{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:8px 12px}.mini-widget{min-height:78px;border-radius:20px;padding:12px;background:#08090bc4;border:1px solid #ffffff0d;backdrop-filter:blur(18px);box-shadow:0 12px 34px #0007}.mini-widget b{color:var(--accent2);font-size:11px}.mini-widget .big{font-size:24px;margin-top:7px}.mini-widget small{color:#887b59}
+.privacy-dot{position:fixed;z-index:120;right:11px;top:calc(env(safe-area-inset-top) + 8px);width:8px;height:8px;border-radius:50%;background:#67d99a;box-shadow:0 0 12px #67d99a;display:none}.privacy-dot.on{display:block}
+
+</style>
+
+<style>
+/* V0.8.1 fixes */
+.lock{
+  position:fixed!important;
+  inset:0!important;
+  z-index:100!important;
+  min-height:100dvh!important;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.56)),
+    var(--lock-wallpaper) center/cover no-repeat!important;
+}
+.lock.hidden{display:none!important}
+.lock:not(.hidden) ~ .screen{visibility:hidden!important}
+.lock-time{margin-top:7vh}
+.lock-brand{margin:auto 0}
+
+/* V0.9 interaction polish */
+.smart-dock{position:fixed;z-index:12;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom) + 10px);display:flex;justify-content:space-around;align-items:center;padding:9px 12px;border-radius:28px;background:#08090bdd;border:1px solid #ffffff10;backdrop-filter:blur(24px);box-shadow:0 16px 55px #000b}
+.smart-dock button{width:52px;height:52px;border-radius:18px;background:#111217;border:1px solid #ffffff0e;color:var(--accent2);font-size:22px;box-shadow:inset 0 1px #ffffff08}
+.smart-dock button:active{transform:scale(.9)}
+body.dock-hidden .smart-dock{display:none}
+.recents{position:fixed;z-index:80;inset:0;background:#020204e8;backdrop-filter:blur(18px);display:none;padding:calc(env(safe-area-inset-top) + 60px) 16px 100px;overflow:auto}
+.recents.show{display:block}.recents h2{color:var(--accent2);letter-spacing:.12em}.recent-card{background:linear-gradient(160deg,#15161a,#08090b);border:1px solid #ffffff10;border-radius:24px;padding:18px;margin:12px 0;min-height:112px;box-shadow:0 18px 50px #0009}.recent-card b{color:#fff1bd}.recent-card small{display:block;color:#8f835f;margin-top:7px}
+.edge-glow{position:fixed;z-index:90;inset:0;pointer-events:none;border:0 solid var(--accent);opacity:0;box-shadow:inset 0 0 45px var(--accent)}
+.edge-glow.flash{animation:edgeFlash .8s ease}
+@keyframes edgeFlash{0%{opacity:0;border-width:0}25%{opacity:.45;border-width:2px}100%{opacity:0;border-width:0}}
+.lock-actions{display:flex;gap:12px;justify-content:center;margin-bottom:8px}.lock-action{width:48px;height:48px;border-radius:50%;background:#08090bbb;border:1px solid #ffffff18;color:var(--accent2);font-size:18px;backdrop-filter:blur(14px)}
+.gesture-pill{position:fixed;z-index:92;bottom:4px;left:50%;transform:translateX(-50%);width:112px;height:5px;border-radius:999px;background:#ffffffb5;box-shadow:0 0 12px #fff3}
+
+
+.native-center{position:fixed;z-index:75;inset:0;background:#030305f2;backdrop-filter:blur(22px);display:none;padding:calc(env(safe-area-inset-top) + 58px) 14px 90px;overflow:auto}
+.native-center.show{display:block}.native-card{background:linear-gradient(160deg,#14151a,#08090b);border:1px solid #ffffff10;border-radius:22px;padding:15px;margin:10px 0}.native-card h3{margin:0 0 8px;color:var(--accent2)}.native-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.native-actions button{background:#121318;border:1px solid #ffffff12;color:#f7e9b7;border-radius:14px;padding:12px}
+.native-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#777;margin-right:7px}.native-dot.on{background:#72e0a8;box-shadow:0 0 12px #72e0a8}
+
+
+/* JAYAN OS 1.1 */
+.notif-center{position:fixed;z-index:84;inset:0;background:#020204ee;backdrop-filter:blur(24px);display:none;padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.notif-center.show{display:block}
+.notif-item{background:linear-gradient(160deg,#15161a,#090a0d);border:1px solid #ffffff10;border-radius:22px;padding:14px;margin:9px 0;display:flex;gap:11px;align-items:flex-start}.notif-item .ni{width:38px;height:38px;border-radius:13px;background:#16120b;border:1px solid #6c5629;display:grid;place-items:center}.notif-item .nb{flex:1}.notif-item b{color:#fff0b8}.notif-item small{color:#8e805c}
+.app-search-native{display:flex;gap:8px;margin:10px 0}.app-search-native input{flex:1;background:#0b0c0f;border:1px solid #ffffff12;border-radius:15px;padding:12px;color:#fff}
+.lock-notifs{width:min(430px,92vw);margin:10px auto}.lock-mini{background:#08090bb8;border:1px solid #ffffff12;border-radius:18px;padding:10px 12px;margin:7px 0;backdrop-filter:blur(14px);font-size:11px;color:#e9ddb7}
+
+
+/* JAYAN OS 1.2 — native launcher polish */
+.app-drawer-native{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 8px;padding:8px 0 24px}
+.native-app{font-size:11px;text-align:center;color:#e8ddb8;min-width:0}
+.native-app .ico{margin:auto auto 6px;overflow:hidden}
+.native-app .ico img{width:100%;height:100%;object-fit:cover;border-radius:inherit}
+.badge{position:absolute;right:-4px;top:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#d24b4b;color:white;font-size:10px;display:grid;place-items:center;border:2px solid #08090b}
+.ico-wrap{position:relative;width:max-content;margin:auto}
+.native-search{width:100%;box-sizing:border-box;background:#090a0d;border:1px solid #ffffff12;border-radius:17px;padding:13px;color:white;margin:8px 0 12px}
+.permission-card{border:1px solid #6a5429;background:#0b0b0dcc;border-radius:18px;padding:12px;margin:10px 0}.permission-card button{margin-top:8px}
+
+
+/* JAYAN OS 1.3 — Device Control */
+.control-hub{position:fixed;z-index:86;inset:0;display:none;background:#020204ef;backdrop-filter:blur(25px);padding:calc(env(safe-area-inset-top) + 52px) 14px 90px;overflow:auto}.control-hub.show{display:block}
+.control-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.control-tile{min-height:92px;border-radius:22px;background:linear-gradient(155deg,#17181d,#090a0d);border:1px solid #ffffff10;color:#eee1b8;padding:13px;text-align:left}.control-tile span{display:block;font-size:25px;margin-bottom:8px;color:var(--accent2)}.control-tile:active{transform:scale(.96)}
+.control-wide{grid-column:1/-1}.brightness-wrap{margin-top:10px}.brightness-wrap input{width:100%}
+
+
+/* JAYAN OS 1.4 — Intelligence & UX */
+:root{--dynamic-accent:var(--accent)}
+.profile-chip{position:fixed;z-index:15;right:14px;top:calc(env(safe-area-inset-top) + 42px);padding:6px 10px;border-radius:999px;background:#08090bbb;border:1px solid #ffffff12;color:var(--accent2);font-size:9px;letter-spacing:.12em;backdrop-filter:blur(14px)}
+.profile-center{position:fixed;z-index:87;inset:0;display:none;background:#020204ef;backdrop-filter:blur(24px);padding:calc(env(safe-area-inset-top) + 55px) 14px 90px;overflow:auto}.profile-center.show{display:block}
+.profile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.profile-btn{min-height:100px;border-radius:23px;background:linear-gradient(155deg,#15161a,#08090b);border:1px solid #ffffff10;color:#e9ddb7;font-size:14px}.profile-btn span{display:block;font-size:28px;margin-bottom:8px}
+.aod{position:fixed;z-index:110;inset:0;background:#000;display:none;align-items:center;justify-content:center}.aod.show{display:flex}.aod-core{text-align:center}.aod-time{font-family:"Orbitron","Segoe UI",sans-serif;font-size:64px;letter-spacing:.1em;color:#e7d79d;text-shadow:0 0 18px #d6aa4540}.aod-date{font-size:10px;letter-spacing:.22em;color:#756a4e;text-transform:uppercase}.aod-bat{margin-top:22px;font-size:10px;color:#655c46}
+body.performance-mode *{backdrop-filter:none!important;box-shadow:none!important;text-shadow:none!important}body.performance-mode .lock::after{display:none!important}
+body.profile-night{--panel-alpha:.90;--dock-alpha:.90}.profile-night .bg{filter:brightness(.42) saturate(.7)}
+body.profile-gym{--accent:#efb64c;--accent2:#fff1bd}.profile-work{--accent:#9bb6ff;--accent2:#e6edff}.profile-minimal .widget,.profile-minimal .jarvis{display:none}
+.haptic-ready button:active,.haptic-ready .app:active{transform:scale(.94)}
+
+
+/* JAYAN OS 1.5 — Command & Safety Core */
+.health-center{position:fixed;z-index:89;inset:0;display:none;background:#020204f2;backdrop-filter:blur(25px);padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.health-center.show{display:block}
+.health-card{background:linear-gradient(155deg,#15161a,#08090b);border:1px solid #ffffff10;border-radius:22px;padding:14px;margin:10px 0}.health-card b{color:var(--accent2)}.health-ok{color:#78dda9}.health-warn{color:#e9ba68}
+.voice-orb{position:fixed;z-index:18;right:16px;bottom:calc(env(safe-area-inset-bottom) + 88px);width:52px;height:52px;border-radius:50%;border:1px solid color-mix(in srgb,var(--accent) 55%,#333);background:#090a0ddd;color:var(--accent2);box-shadow:0 0 24px color-mix(in srgb,var(--accent) 18%,transparent);font-size:20px}.voice-orb.listening{animation:voicePulse 1s infinite alternate}@keyframes voicePulse{to{box-shadow:0 0 38px color-mix(in srgb,var(--accent) 48%,transparent);transform:scale(1.06)}}
+body.safe-boot .widget,body.safe-boot .jarvis,body.safe-boot .cyber-line{display:none!important}
+
+
+/* JAYAN OS 1.6 — Release Candidate */
+.release-center{position:fixed;z-index:91;inset:0;display:none;background:#020204f2;backdrop-filter:blur(25px);padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.release-center.show{display:block}
+.release-card{background:linear-gradient(155deg,#15161a,#08090b);border:1px solid #ffffff10;border-radius:22px;padding:14px;margin:10px 0}.release-card b{color:var(--accent2)}.release-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.release-grid button{background:#101116;border:1px solid #ffffff12;color:#eee1b8;border-radius:14px;padding:12px}
+.boot-logo{position:fixed;z-index:130;inset:0;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .45s ease}.boot-logo.hide{opacity:0;pointer-events:none}.boot-core{text-align:center}.boot-core img{width:112px;height:112px;border-radius:50%;box-shadow:0 0 45px #d6aa4550}.boot-core h1{font-family:"Orbitron","Segoe UI",sans-serif;letter-spacing:.22em;color:#f3e3ad;font-size:18px}.boot-core small{color:#71674d;letter-spacing:.18em}
+
+
+/* JAYAN OS 1.7 — Daily Driver */
+.launcher-search{position:fixed;z-index:93;inset:0;display:none;background:#020204e8;backdrop-filter:blur(26px);padding:calc(env(safe-area-inset-top) + 54px) 14px 90px;overflow:auto}.launcher-search.show{display:block}
+.launcher-search input{width:100%;box-sizing:border-box;background:#0b0c10;border:1px solid #ffffff14;border-radius:22px;padding:16px;color:#fff;font-size:16px;outline:none}.search-section{margin-top:18px}.search-section h3{font-size:10px;letter-spacing:.18em;color:#8f815e}.search-hit{display:flex;align-items:center;gap:11px;background:#101116;border:1px solid #ffffff0d;border-radius:18px;padding:12px;margin:7px 0}.search-hit .sicon{width:36px;height:36px;border-radius:12px;background:#18191d;display:grid;place-items:center;color:var(--accent2)}
+.widget-stack{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:8px 12px}.mini-widget{min-height:78px;border-radius:20px;padding:12px;background:#08090bc4;border:1px solid #ffffff0d;backdrop-filter:blur(18px);box-shadow:0 12px 34px #0007}.mini-widget b{color:var(--accent2);font-size:11px}.mini-widget .big{font-size:24px;margin-top:7px}.mini-widget small{color:#887b59}
+.privacy-dot{position:fixed;z-index:120;right:11px;top:calc(env(safe-area-inset-top) + 8px);width:8px;height:8px;border-radius:50%;background:#67d99a;box-shadow:0 0 12px #67d99a;display:none}.privacy-dot.on{display:block}
+
+</style>

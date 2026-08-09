@@ -1,0 +1,12 @@
+JAYAN OS WEB V0.4
+- 3 launcher pages with swipe navigation
+- Reorderable app icons (long press -> edit mode -> drag)
+- Persistent home layout
+- Folders: Tools / Media
+- Widgets on Home
+- Lock Screen
+- App Drawer
+- Quick Settings / Notifications
+- Configurable wallpaper
+- Notes
+- TLD V5.5.4 embedded unchanged

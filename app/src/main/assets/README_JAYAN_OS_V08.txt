@@ -1,0 +1,11 @@
+JAYAN OS V0.8 FLAGSHIP
+- Samsung-like smoother Quick Settings panel with drag gesture physics
+- Cyberpunk home clock
+- Futuristic lock screen with animated grid/sweep/glow
+- Lock telemetry: battery/network/security
+- Better notification cards
+- More polished launcher transitions
+- More quick toggles: Battery, Privacy, Zen, Lock
+- Motion settings: fluid panel, lock FX, cyber glow
+- Preserves TLD and existing local data
+- Keeps Android launcher bridge scaffold
