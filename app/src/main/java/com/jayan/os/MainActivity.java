@@ -213,7 +213,4 @@ public class MainActivity extends Activity {
         }
     }
 
-    @Override public void onBackPressed() {
-        if (web.canGoBack()) web.goBack(); else moveTaskToBack(true);
-    }
 }
